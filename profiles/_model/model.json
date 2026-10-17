@@ -1,0 +1,823 @@
+{
+ "_about": "Starting model for a new game (skill sonmat-new-game). Standards for combat / movement / cutscene, measured on Stellar Blade (10-09) and settled on Wukong, Lies of P, Final Fight, Cadillacs. A game only says which of its sounds belongs to which slot (profiles/<id>/game.json); tools/new_profile.py writes haptics.json from that. Every level here is a starting value: the user tunes by feel afterwards.",
+ "standards": {
+  "combat": [
+   "Peak is not rationed, time at the peak is: a strong hit rises in 0.05 s, is at 1/3 after 0.06 s and at 1/10 after 0.4 s (style sb: 52 Hz body under the sound's own texture).",
+   "Only the game's biggest moments (parry / just dodge, finisher, stagger) touch the ceiling - three or four kinds per game (style.top).",
+   "Where it shakes = the rule (the sound's name). How it shakes = that sound itself, band 30-500 Hz. The drawn wave is the fallback until the sounds are prepared.",
+   "The same sound is the same strength. Weight differs only when the name differs (S/M/L, weapon).",
+   "Pad speaker: one or two kinds of moment only (parry, charge done, stagger, a signature voice), low level (gain 0.2, cut below 300 Hz), together with the peak vibration.",
+   "Triggers: only on an action that really sits on L2/R2, always with hold/until."
+  ],
+  "movement": [
+   "Movement is felt, not announced. Weapon swings play their own sound, low (0.35, heavy 0.65) - this is where a game's texture comes from. Dodges, jumps, landings and plain steps stay drawn and low (0.15-0.35). None of them is redrawn as a hit (style.skip).",
+   "Plain floors stay quiet: drawn step, in combat only. Ground you feel (snow, sand, grass, water, ice) plays its own footstep sound as vibration, also outside combat (peak 0.26-0.36).",
+   "Anything that fires more than about once a second all game long is dropped or kept under 0.2.",
+   "Places are part of the first build, unasked: read the game's stage list for vehicles, water, snow, swamp. A place is a state, not an event: a bed that repeats while it lasts (profile 'beds': engine chug 0.2-0.3, water around the legs about 0.1), the steps inside it (wading 0.3), and the events at its edges (splash, the car hitting a body)."
+  ],
+  "cutscene": [
+   "A game that is silent in cutscenes feels half done. Every scene gets a track.",
+   "Impacts first: only what stands out of the scene's own level passes (gate), plus a little of the sustained rumble (keep 0.15). Music-only and voice-only cues are left out.",
+   "Scene peaks around 0.65 after gain (pct 90, gain 2.0); stored at 4 kHz, loaded on first use.",
+   "Nothing says 'skipped': the track ends when the player's own steps or attacks come back (not within the first 2 s)."
+  ],
+  "shooting": [
+   "A game with shooting in it (pod fire, flight sections, twin-stick hacking, bullet hell) gets its own layer: the action standard alone leaves these parts silent or buzzing.",
+   "My held fire is a texture, not a row of hits: one faint tick per shot, thinned to about 8 a second (rule gap 0.12), peak about 0.1. It must never mask a sword hit or a dodge.",
+   "A single heavy shot (laser, missile, charged shot) is one event: a tick or a short thump.",
+   "My bullets landing: only when the game names it apart from the enemy's bullets, and then tiny and thinned. When it cannot be told whose bullet it was, leave it out.",
+   "What matters most in bullet hell is being hit and what is about to hit: my damage is as strong as in melee; a large enemy attack charging up gets a low swell, its release a thump.",
+   "Explosions carry the kills: small / medium / large by the name."
+  ]
+ },
+ "defaults": {
+  "master": 1.0,
+  "duck": 0.3,
+  "gap": 0.05,
+  "combat_hold": 6.0,
+  "style": {
+   "hit": "sb"
+  },
+  "speaker": {
+   "gain": 0.7,
+   "all": false
+  },
+  "cutscene": {
+   "gain": 2.0,
+   "skip_grace": 2.0,
+   "max_s": 300,
+   "match": "impact|hit|crash|explo|break|slam|fall|door|gun|clash|stab|thud",
+   "wave": "seq",
+   "gap": 0.12
+  },
+  "scenes": {
+   "rate": 4000,
+   "target": 0.35,
+   "pct": 90,
+   "keep": 0.15
+  },
+  "texture": {
+   "peak": 0.3,
+   "peaks": [
+    [
+     "snow.?deep",
+     0.36
+    ],
+    [
+     "grass",
+     0.26
+    ]
+   ]
+  }
+ },
+ "waves": {
+  "_note": "parts play in sequence: [freq Hz, length ms, amp, decay ms] = burst, a number = gap ms, {\"swell\": [freq, ms, amp]}",
+  "impact": [
+   [
+    85,
+    60,
+    0.5,
+    24
+   ]
+  ],
+  "smash": [
+   [
+    60,
+    110,
+    0.8,
+    45
+   ]
+  ],
+  "pierce": [
+   [
+    250,
+    10,
+    0.55,
+    3
+   ]
+  ],
+  "blunt": [
+   [
+    55,
+    90,
+    0.45,
+    40
+   ]
+  ],
+  "guard": [
+   [
+    70,
+    90,
+    0.45,
+    35
+   ]
+  ],
+  "pguard": [
+   [
+    260,
+    18,
+    1.0,
+    5
+   ],
+   [
+    150,
+    25,
+    0.8,
+    8
+   ],
+   [
+    70,
+    130,
+    0.75,
+    55
+   ]
+  ],
+  "fatal": [
+   [
+    55,
+    90,
+    1.0,
+    40
+   ],
+   30,
+   [
+    45,
+    300,
+    0.85,
+    140
+   ]
+  ],
+  "stagger": [
+   [
+    200,
+    15,
+    0.8,
+    5
+   ],
+   [
+    70,
+    120,
+    0.8,
+    50
+   ]
+  ],
+  "hurt": [
+   [
+    70,
+    50,
+    0.6,
+    25
+   ]
+  ],
+  "struck": [
+   [
+    70,
+    60,
+    0.9,
+    30
+   ],
+   [
+    45,
+    140,
+    0.6,
+    70
+   ]
+  ],
+  "down": [
+   [
+    50,
+    120,
+    0.9,
+    50
+   ],
+   20,
+   [
+    40,
+    280,
+    0.6,
+    130
+   ]
+  ],
+  "death": [
+   [
+    50,
+    150,
+    1.0,
+    70
+   ],
+   40,
+   {
+    "swell": [
+     40,
+     900,
+     0.5
+    ]
+   }
+  ],
+  "swing": [
+   [
+    140,
+    25,
+    0.15,
+    10
+   ]
+  ],
+  "lunge": [
+   [
+    60,
+    90,
+    0.35,
+    40
+   ]
+  ],
+  "dodge": [
+   [
+    130,
+    30,
+    0.35,
+    12
+   ],
+   50,
+   [
+    130,
+    30,
+    0.3,
+    12
+   ]
+  ],
+  "land": [
+   [
+    60,
+    70,
+    0.35,
+    30
+   ]
+  ],
+  "step": [
+   [
+    65,
+    35,
+    0.15,
+    14
+   ]
+  ],
+  "ground": [
+   [
+    65,
+    35,
+    0.15,
+    14
+   ]
+  ],
+  "splash": [
+   [
+    110,
+    40,
+    0.12,
+    15
+   ]
+  ],
+  "charge": [
+   [
+    100,
+    30,
+    0.4,
+    12
+   ],
+   45,
+   [
+    100,
+    35,
+    0.55,
+    14
+   ]
+  ],
+  "heal": [
+   {
+    "swell": [
+     70,
+     600,
+     0.35
+    ]
+   }
+  ],
+  "buff": [
+   {
+    "swell": [
+     90,
+     400,
+     0.4
+    ]
+   }
+  ],
+  "uitick": [
+   [
+    220,
+    8,
+    0.15,
+    3
+   ]
+  ],
+  "click": [
+   [
+    180,
+    12,
+    0.4,
+    5
+   ],
+   30,
+   [
+    110,
+    40,
+    0.35,
+    15
+   ]
+  ],
+  "thud": [
+   [
+    55,
+    260,
+    0.4,
+    110
+   ]
+  ],
+  "break": [
+   [
+    80,
+    120,
+    0.5,
+    50
+   ]
+  ],
+  "boom": [
+   [
+    45,
+    220,
+    1.0,
+    120
+   ]
+  ],
+  "blast": [
+   [
+    50,
+    120,
+    1.0,
+    50
+   ],
+   [
+    40,
+    250,
+    0.6,
+    120
+   ]
+  ],
+  "seq": [
+   [
+    60,
+    160,
+    0.3,
+    70
+   ]
+  ],
+  "whoosh": [
+   [
+    120,
+    60,
+    0.35,
+    25
+   ]
+  ],
+  "soft": [
+   {
+    "swell": [
+     120,
+     200,
+     0.2
+    ]
+   }
+  ],
+  "tick": [
+   [
+    200,
+    15,
+    0.3,
+    5
+   ]
+  ],
+  "patter": [
+   [
+    180,
+    14,
+    0.3,
+    6
+   ]
+  ],
+  "spatter": [
+   [
+    230,
+    8,
+    0.25,
+    4
+   ]
+  ],
+  "quake": [
+   {
+    "swell": [
+     38,
+     1200,
+     0.45
+    ]
+   }
+  ],
+  "roar": [
+   {
+    "swell": [
+     42,
+     1400,
+     0.6
+    ]
+   }
+  ],
+  "warp": [
+   {
+    "swell": [
+     60,
+     500,
+     0.45
+    ]
+   },
+   [
+    90,
+    40,
+    0.5,
+    15
+   ]
+  ],
+  "hold": [
+   [
+    150,
+    60,
+    0.18,
+    40
+   ]
+  ]
+ },
+ "_wave_kinds_note": "how rough each common wave is: the kind that thing is in the reference game (sonmat/data/haptic_templates.json, measured from Stellar Blade's own haptic sounds). tools/new_profile.py writes the profile's \"rough\" from this. The wave keeps its own pitch, length, beats and strength; only how wide and grainy it is at that pitch comes from the kind. A wave a game adds gets its own line, chosen for what that thing is (2026-10-14, never felt)",
+ "wave_kinds": {
+  "impact": "hit",
+  "smash": "hit_m",
+  "pierce": "stab",
+  "blunt": "blunt",
+  "guard": "guard",
+  "pguard": "pguard",
+  "fatal": "fatal",
+  "stagger": "stagger",
+  "hurt": "hit",
+  "struck": "hit",
+  "down": "down",
+  "boom": "blast",
+  "blast": "blast",
+  "thud": "thud",
+  "break": "hit_wood",
+  "land": "land_heavy",
+  "step": "step",
+  "ground": "step_sand",
+  "splash": "step_water",
+  "heal": "heal",
+  "buff": "buff",
+  "click": "click",
+  "uitick": "uitick",
+  "death": "knockdown",
+  "swing": "swing",
+  "lunge": "swing_l",
+  "dodge": "roll",
+  "charge": "charged",
+  "seq": "hit_s",
+  "whoosh": "swing_l",
+  "soft": "item",
+  "tick": "shot_s",
+  "patter": "shot_s",
+  "spatter": "hit_s",
+  "quake": "quake",
+  "roar": "quake",
+  "warp": "warp",
+  "hold": "spray"
+ },
+ "slots": [
+  {
+   "slot": "parry",
+   "area": "combat",
+   "wave": "pguard",
+   "top": true,
+   "speaker": true,
+   "trim": 1.3,
+   "combat": true,
+   "look_for": "perfect guard, parry, just dodge / just avoid"
+  },
+  {
+   "slot": "finisher",
+   "area": "combat",
+   "wave": "fatal",
+   "top": true,
+   "trim": 1.0,
+   "combat": true,
+   "look_for": "finisher, execution, critical, fatal"
+  },
+  {
+   "slot": "stagger",
+   "area": "combat",
+   "wave": "stagger",
+   "top": true,
+   "speaker": true,
+   "trim": 1.0,
+   "combat": true,
+   "look_for": "enemy staggered / groggy / armour break"
+  },
+  {
+   "slot": "guard",
+   "area": "combat",
+   "wave": "guard",
+   "trim": 0.8,
+   "combat": true,
+   "look_for": "my guard taking a hit"
+  },
+  {
+   "slot": "death",
+   "area": "combat",
+   "wave": "death",
+   "combat": true,
+   "look_for": "my death",
+   "trim": 1.0
+  },
+  {
+   "slot": "down",
+   "area": "combat",
+   "wave": "down",
+   "combat": true,
+   "look_for": "I am knocked down, body fall",
+   "trim": 0.9
+  },
+  {
+   "slot": "struck",
+   "area": "combat",
+   "wave": "struck",
+   "trim": 0.8,
+   "combat": true,
+   "look_for": "I take a heavy hit"
+  },
+  {
+   "slot": "hurt",
+   "area": "combat",
+   "wave": "hurt",
+   "combat": true,
+   "look_for": "I take a hit",
+   "trim": 0.8
+  },
+  {
+   "slot": "hit_heavy",
+   "area": "combat",
+   "wave": "smash",
+   "trim": 1.1,
+   "combat": true,
+   "look_for": "my heavy weapon / L-size hit landing"
+  },
+  {
+   "slot": "hit_pierce",
+   "area": "combat",
+   "wave": "pierce",
+   "trim": 0.9,
+   "combat": true,
+   "look_for": "spear / stab landing"
+  },
+  {
+   "slot": "hit_blunt",
+   "area": "combat",
+   "wave": "blunt",
+   "trim": 0.9,
+   "combat": true,
+   "look_for": "fist / blunt landing"
+  },
+  {
+   "slot": "hit_light",
+   "area": "combat",
+   "wave": "impact",
+   "trim": 0.7,
+   "combat": true,
+   "look_for": "S-size hit, bullets landing"
+  },
+  {
+   "slot": "hit",
+   "area": "combat",
+   "wave": "impact",
+   "trim": 0.9,
+   "combat": true,
+   "look_for": "my weapon landing (the rest)"
+  },
+  {
+   "slot": "boom",
+   "area": "combat",
+   "wave": "boom",
+   "look_for": "large explosion",
+   "trim": 1.0
+  },
+  {
+   "slot": "blast",
+   "area": "combat",
+   "wave": "blast",
+   "look_for": "explosion, enemy destroyed",
+   "trim": 0.8
+  },
+  {
+   "slot": "slam",
+   "area": "combat",
+   "wave": "thud",
+   "skip": true,
+   "player_control": true,
+   "look_for": "my own heavy move hitting the ground",
+   "trim": 0.8
+  },
+  {
+   "slot": "charge",
+   "area": "combat",
+   "wave": "charge",
+   "skip": true,
+   "player_control": true,
+   "look_for": "charge start / charge level"
+  },
+  {
+   "slot": "stream",
+   "area": "shooting",
+   "wave": "patter",
+   "skip": true,
+   "gap": 0.12,
+   "look_for": "my held fire: one sound per bullet (gatling, flight unit shots, hacking shots)"
+  },
+  {
+   "slot": "shot",
+   "area": "shooting",
+   "wave": "tick",
+   "skip": true,
+   "look_for": "my single heavy shots: laser, missile, charged shot",
+   "trim": 0.5
+  },
+  {
+   "slot": "shot_hit",
+   "area": "shooting",
+   "wave": "spatter",
+   "skip": true,
+   "gap": 0.15,
+   "look_for": "my bullets landing, only if named apart from the enemy's"
+  },
+  {
+   "slot": "telegraph",
+   "area": "shooting",
+   "wave": "soft",
+   "skip": true,
+   "look_for": "a large enemy attack charging up (laser tele, charge)",
+   "trim": 0.4
+  },
+  {
+   "slot": "beam",
+   "area": "shooting",
+   "wave": "thud",
+   "skip": true,
+   "look_for": "a large enemy attack released (big laser fired)",
+   "trim": 0.8
+  },
+  {
+   "slot": "buff",
+   "area": "combat",
+   "wave": "buff",
+   "skip": true,
+   "look_for": "power-up on",
+   "trim": 0.6
+  },
+  {
+   "slot": "heal",
+   "area": "combat",
+   "wave": "heal",
+   "skip": true,
+   "look_for": "healing item"
+  },
+  {
+   "slot": "swing_heavy",
+   "area": "movement",
+   "wave": "lunge",
+   "skip": true,
+   "combat": true,
+   "player_control": true,
+   "look_for": "heavy weapon swing, L-size whoosh",
+   "trim": 0.65
+  },
+  {
+   "slot": "swing",
+   "area": "movement",
+   "wave": "swing",
+   "skip": true,
+   "combat": true,
+   "player_control": true,
+   "look_for": "weapon swings, whooshes",
+   "trim": 0.35
+  },
+  {
+   "slot": "dodge",
+   "area": "movement",
+   "wave": "dodge",
+   "skip": true,
+   "combat": true,
+   "player_control": true,
+   "look_for": "dodge, roll, dash"
+  },
+  {
+   "slot": "jump",
+   "area": "movement",
+   "wave": "soft",
+   "skip": true,
+   "player_control": true,
+   "look_for": "jump start"
+  },
+  {
+   "slot": "land",
+   "area": "movement",
+   "wave": "land",
+   "skip": true,
+   "player_control": true,
+   "look_for": "landing"
+  },
+  {
+   "slot": "step_texture",
+   "area": "movement",
+   "wave": "ground",
+   "skip": true,
+   "player_control": true,
+   "texture": true,
+   "look_for": "my footsteps on snow, sand, grass, water, ice, glass"
+  },
+  {
+   "slot": "step",
+   "area": "movement",
+   "wave": "step",
+   "skip": true,
+   "player_control": true,
+   "combat_only": true,
+   "look_for": "my footsteps on plain floors"
+  },
+  {
+   "slot": "touch",
+   "area": "movement",
+   "wave": "soft",
+   "skip": true,
+   "look_for": "brushing through plants, picking up an item"
+  },
+  {
+   "slot": "click",
+   "area": "movement",
+   "wave": "click",
+   "skip": true,
+   "look_for": "weapon change, equip",
+   "trim": 0.5
+  },
+  {
+   "slot": "quake",
+   "area": "world",
+   "wave": "quake",
+   "look_for": "ground or sea moving under you: earthquake, waves rocking a boat kitchen, a giant's stamp felt through the floor"
+  },
+  {
+   "slot": "roar",
+   "area": "world",
+   "wave": "roar",
+   "look_for": "a big creature's roar or scream (a boss)"
+  },
+  {
+   "slot": "warp",
+   "area": "world",
+   "wave": "warp",
+   "look_for": "teleport, warp, blink"
+  },
+  {
+   "slot": "hold",
+   "area": "world",
+   "wave": "hold",
+   "drawn": true,
+   "bed": {
+    "every": 0.07,
+    "vary": 0.7,
+    "max": 30
+   },
+   "look_for": "a sound that keeps going while something is on - fire burning, an extinguisher / flamethrower / water jet spraying. Felt as long as it plays: it ends on the game's stop line (Stop_<name>), or after max seconds"
+  },
+  {
+   "slot": "scene",
+   "area": "cutscene",
+   "look_for": "cues that carry a whole scene's sound bed (goes to source.scenes, not to rules)"
+  },
+  {
+   "slot": "scene_skip",
+   "area": "cutscene",
+   "look_for": "scene cues to leave out: voice only, music only, temp"
+  }
+ ],
+ "_flags": "slot flags: top = may touch the ceiling; speaker = also on the pad speaker; skip = never redrawn as a hit; drawn = keeps the model's wave even when the game's sound is there; trim = level of the clip made from the game's sound; gap = thinning in seconds; combat_only / player_control / combat = the engine's rule flags. bed = held while the sound plays: one bed per name, pulses of the wave every / vary, ended by Stop_<name> (engine beds).",
+ "_rule_sound_first": "user 10-16: '음이 있으면 다 원음이지' - every slot plays the game's own sound when it has one; the slot's wave is only the fallback for an event with no clip. Was drawn (template) for: charge, stream, shot_hit, heal, dodge, jump, land, step, touch"
+}

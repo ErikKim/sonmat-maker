@@ -1,0 +1,58 @@
+{
+ "name": "Sekiro: Shadows Die Twice",
+ "exe": "sekiro.exe",
+ "engine": "ue4",
+ "event_file": "C:\\Users\\Public\\dshaptics\\events_fmod.log",
+ "_run_note": "autosetup (fromsoft_fsb): the FMOD Ex hook (dll/dshaptics_fmodex.dll) reports a sound by its place in the bank - run tools/fmod_ids.py <id> once for the names. Slots from tools/autosetup.py; unnamed blows are picked by their shape when the sounds are prepared",
+ "slots": {
+  "hit": "^(?:CURSOL_MOVE|body\\-armor\\-1|body\\-armor\\-2|body\\-armor\\-3|body\\-armor\\-4|body\\-armor\\-5|body\\-armor\\-6|body\\-armor\\-b4|body\\-armor\\-b5|body\\-lobe\\-1|body\\-lobe\\-2|body\\-lobe\\-3|body\\-lobe\\-4|body\\-lobe\\-5|downs2|dummy|fdp_soulsword_hit|hammer\\-hit1|hammer\\-hit2|iron\\-knock\\-iron|iron\\-knock\\-meat|iron\\-knock\\-meat2|iron\\-knock\\-stone|iron\\-knock\\-stone2|iron\\-knock\\-wood|iron\\-stab\\-iron|iron\\-stab\\-wood|kill\\-kick|large\\-weapon\\-hit|meat\\-knock\\-iron|meat\\-knock\\-iron2|meat\\-knock\\-iron3|meat\\-knock\\-meat|meat\\-knock\\-meat2|meat\\-knock\\-stone2|meat\\-knock\\-wood|meat\\-knock\\-wood2|shield\\-iron1|shield\\-iron1_large|shield\\-iron2|swing\\-knock|swing\\-knock\\-large|wood\\-knock\\-iron|wood\\-knock\\-iron2|wood\\-knock\\-meat|wood\\-knock\\-stone|wood\\-knock\\-stone2|wood\\-knock\\-wood|wood\\-knock\\-wood2|wood1)$",
+  "touch": "^(?:EST\\-drink|foot\\-grass\\-l|foot\\-grass\\-r1|foot\\-grass\\-r2|foot\\-grass\\-r3|foot\\-grass\\-w1|foot\\-grass\\-w2|foot\\-grass\\-w3|foot2|iron\\-cut\\-iron|iron\\-cut\\-iron2|iron\\-cut\\-iron3|iron\\-cut\\-stone|iron\\-cut\\-stone2|iron\\-cut\\-wood|movement1|movement2)$",
+  "hurt": "^(?:abnormal\\-status\\-blood|blood1|blood3|bone_damage2|bone_damage2b|bone_damage2c|c2250_blood|damage1|damage2|damage3|damage_SE|damage_SE2|damage_SE3|enemy_damage1|enemy_damage2|enemy_damage3|enemy_damage4|enemy_damage5|fdp_soulsword_stab|iron\\-stab\\-meat|iron\\-stab\\-meat2|p_damage1|p_damage2|p_damage3)$",
+  "swing": "^(?:body\\-hauberk\\-1|body\\-hauberk\\-2|body\\-hauberk\\-3|body\\-hauberk\\-4|body\\-hauberk\\-5|fdp_soulsword_swing|swing\\-hand|swing\\-katana|swing\\-stab|swing\\-stab2|swing\\-stab3|swing\\-stab3b|swing\\-stab3c|swing\\-stab3d|swing\\-sword|swing\\-sword2|swing\\-throw|sword\\-x\\-sword1|sword\\-x\\-sword2|sword\\-x\\-sword3|taimatsu_swing)$",
+  "dodge": "^(?:body\\-lobe\\-rolling)$",
+  "shot": "^(?:bow\\-large\\-shot|bow\\-shot1|bow\\-shot2|bow\\-shot3|bowgun\\-shot|large\\-weapon\\-pullout)$",
+  "charge": "^(?:charge\\-comboattack|swing\\-stab\\-charge)$",
+  "click": "^(?:foot\\-stone\\-l|foot\\-stone\\-ra1|foot\\-stone\\-ra2|foot\\-stone\\-ra3|foot\\-stone\\-wa1|foot\\-stone\\-wa2|foot\\-stone\\-wa3|iron\\-stab\\-stone)$",
+  "blast": "^(?:fragment|fragment2)$",
+  "land": "^(?:kama_land)$",
+  "heal": "^(?:miracle\\-healing)$"
+ },
+ "triggers": {
+  "fire": {
+   "match": "^(?:bow\\-large\\-shot|bow\\-shot1|bow\\-shot2|bow\\-shot3|bowgun\\-shot)$",
+   "pad": "R2",
+   "effect": "vibrate",
+   "amp": 8,
+   "hz": 8,
+   "hold": 0.13
+  },
+  "charge": {
+   "match": "^(?:charge\\-comboattack|swing\\-stab\\-charge)$",
+   "pad": "R2",
+   "effect": "resist",
+   "force": 140,
+   "hold": 4,
+   "until": "^(?:bow\\-large\\-shot|bow\\-shot1|bow\\-shot2|bow\\-shot3|bowgun\\-shot)$"
+  },
+  "_note": "tools/autosetup.py: by slot and word, R2 (which trigger a game uses for what is not in its files) - nothing felt yet"
+ },
+ "player": ".",
+ "native": {
+  "dll": "dshaptics_fmodex.dll",
+  "places": "fmod_ids.json"
+ },
+ "source": {
+  "steam_dir": "Sekiro",
+  "trees": "trees.json",
+  "hap": "hap",
+  "spk": "spk",
+  "type": "fromsoft_fsb",
+  "auto_rules": "rules_auto.json",
+  "auto_gain": 0.6,
+  "archive": "Data1",
+  "archive_files": [
+   "/sound/main.fsb",
+   "/sound/smain.fsb"
+  ]
+ }
+}

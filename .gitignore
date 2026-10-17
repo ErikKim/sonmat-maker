@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+*.wav
+*.wem
+*.ogg
+*.bnk
+*.fsb
+*.mp3
+*.flac
+
+# auto-setup games: not distributed (10-16)
+profiles/overcooked2/
+profiles/biped/
+profiles/chainedtogether/
+*.bak_*

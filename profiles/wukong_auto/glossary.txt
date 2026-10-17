@@ -1,0 +1,9 @@
+bang = my staff (the player's weapon); hit_player_bang = my staff hitting an enemy (my_hit)
+cast = releasing a charged heavy attack (release); xiapi = downward smash; huiwu = sweeping swing
+zhuangun = staff spin; hit_enm_*_zhuangun = enemy arrow/magic deflected by my spinning staff (parry)
+jingzhunshanbi = perfect dodge; tttb = counter-stance spell, tttb_success = successful counter (parry)
+fashu = spell; dss = immobilize spell; heyao = drinking the healing gourd; bianshen = transformation
+zadi = my staff slamming the ground (my_hit); die_bodyfall = me falling down after being knocked out (get_hit)
+xuli_levelNN_cast (any suffix) = release of the charged attack, never charge; xuli_levelNN_rise / _done = charge
+hit_enm_* = an enemy's attack landing on me (get_hit), except hit_enm_*_zhuangun (deflected, parry)
+charge level sets weight: level01 = light, level02 = mid, level03 / level04 = strong (also for their casts)

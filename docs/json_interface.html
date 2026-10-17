@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>dshaptics 설정 구조</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f5f2; --panel:#ffffff; --ink:#1d1d1b; --muted:#6b6a65; --line:#dcdad3;
+  --code:#f0eee8; --accent:#1f5f8b; --warn:#9a4a12; --ok:#2f6b3a;
+  --tag-auto:#e4ecf3; --tag-rare:#efe9dc; --tag-often:#e3efe3;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#161614; --panel:#1f1f1c; --ink:#e8e6e0; --muted:#9a988f; --line:#34332f;
+    --code:#262622; --accent:#7fb3d9; --warn:#e0a070; --ok:#8fc79a;
+    --tag-auto:#22303b; --tag-rare:#36301f; --tag-often:#233325;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#161614; --panel:#1f1f1c; --ink:#e8e6e0; --muted:#9a988f; --line:#34332f;
+  --code:#262622; --accent:#7fb3d9; --warn:#e0a070; --ok:#8fc79a;
+  --tag-auto:#22303b; --tag-rare:#36301f; --tag-often:#233325;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 "IBM Plex Sans KR",system-ui,sans-serif}
+main{max-width:980px;margin:0 auto;padding:40px 16px 80px}
+h1{font-size:26px;font-weight:600;margin:0 0 6px}
+h2{font-size:19px;font-weight:600;margin:48px 0 12px;padding-top:16px;border-top:1px solid var(--line)}
+h3{font-size:15px;font-weight:600;margin:24px 0 8px}
+p{margin:8px 0}
+.sub{color:var(--muted);margin-bottom:28px}
+code,pre{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:13px}
+code{background:var(--code);padding:1px 5px;border-radius:3px}
+pre{background:var(--code);padding:14px 16px;border-radius:6px;overflow-x:auto;line-height:1.5;margin:10px 0}
+.verdict{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--warn);padding:14px 18px;border-radius:4px}
+.verdict b{color:var(--warn)}
+table{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--line);font-size:14px;margin:10px 0}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:12.5px;background:var(--bg)}
+td:first-child{white-space:nowrap}
+.tag{display:inline-block;font-size:12px;padding:1px 7px;border-radius:10px;white-space:nowrap}
+.auto{background:var(--tag-auto)} .rare{background:var(--tag-rare)} .often{background:var(--tag-often)}
+.new{color:var(--ok);font-weight:600}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:14px 16px}
+.card h3{margin-top:0}
+ul{margin:6px 0;padding-left:20px}
+.muted{color:var(--muted)}
+@media (max-width:720px){.cols{grid-template-columns:1fr} td:first-child{white-space:normal}}
+</style>
+</head>
+<body>
+<main>
+<h1>dshaptics 설정 구조</h1>
+<p class="sub">현재 json 인터페이스와 입력값, 그리고 새 기능(좌우·트리거·라이트바·상태 베드)을 넣었을 때의 모습. 2026-10-06 기준 코드에서 읽음.</p>
+
+<div class="verdict">
+<p><b>먼저 사실관계.</b> "json만 고친다"는 원칙은 지금 <b>P의 거짓(UE4 공용 경로)에만</b> 적용돼 있어요. 오공은 대부분이 <code>dshaptics.py</code> 안의 상수와 정규식 표예요. json은 도구가 만든 데이터(음원 트리·자동 분류)뿐이에요.</p>
+<p>그리고 복잡도는 생각보다 작게 잡을 수 있어요. 사람이 자주 만지는 곳은 <b>규칙(rules) 한 줄</b>뿐이고, 새 기능은 그 한 줄에 <b>선택 필드</b>로 붙이면 돼요.</p>
+</div>
+
+<h2>1. P의 거짓 — <code>profiles/liesofp/haptics.json</code></h2>
+<p>최상위 섹션 9개. 누가 언제 만지는지로 나누면 이렇습니다.</p>
+<p>
+<span class="tag auto">자동</span> 도구가 채움, 사람은 안 봄 &nbsp;
+<span class="tag rare">가끔</span> 게임당 한 번 정함 &nbsp;
+<span class="tag often">자주</span> 튜닝할 때 계속 만짐
+</p>
+
+<table>
+<tr><th>섹션</th><th>빈도</th><th>하는 일</th><th>입력값 (현재)</th></tr>
+<tr><td><code>exe</code></td><td><span class="tag rare">가끔</span></td><td>실행 중인 게임과 이 파일을 연결</td><td><code>"LOP-Win64-Shipping.exe"</code></td></tr>
+<tr><td><code>native</code></td><td><span class="tag auto">자동</span></td><td>DLL이 훅 걸 주소. <code>tools/find_ue4_audio.py</code> 출력을 붙임</td><td>AddNewActiveSound 패턴+<code>+3be3ae0</code>, FNameToString, SoundOffset <code>18</code>, OwnerNameOffset <code>44</code></td></tr>
+<tr><td><code>player</code></td><td><span class="tag rare">가끔</span></td><td>"내 소리" 판별 정규식 (owner·소리 이름)</td><td><code>"PC_Pino|_PC_"</code></td></tr>
+<tr><td><code>master</code> / <code>duck</code></td><td><span class="tag often">자주</span></td><td>전체 세기 / 큰 진동 밑에 깔린 작은 진동을 줄이는 비율</td><td><code>0.6</code> / <code>0.3</code></td></tr>
+<tr><td><code>waves</code></td><td><span class="tag rare">가끔</span></td><td>진동 파형 사전. 이름 → 파형 조각 목록</td><td>19종 (pguard, guard, struck, fatal, impact, swing, charge, dodge, heal, ergo, step, thud, break, seq, down, tick, arm, land, splash)</td></tr>
+<tr><td><code>rules</code></td><td><span class="tag often">자주</span></td><td>소리 이름 → 어떤 파형. 위에서부터 첫 일치</td><td>18줄</td></tr>
+<tr><td><code>my_hit</code></td><td><span class="tag rare">가끔</span></td><td>내 타격 전용 소리가 없는 게임용 대체 규칙 (휘두른 직후 적 피격음)</td><td><code>null</code> (P의 거짓은 <code>SE_PC_SK_Hit_*</code>가 있어서 불필요)</td></tr>
+<tr><td><code>combat_hold</code> / <code>gap</code></td><td><span class="tag rare">가끔</span></td><td>전투 상태 유지 시간 / 같은 파형 최소 간격</td><td><code>6.0</code>초 / <code>0.05</code>초</td></tr>
+<tr><td><code>weather</code></td><td><span class="tag rare">가끔</span></td><td>비 그래뉼러 + 천둥 럼블 생성기</td><td>아래 표</td></tr>
+<tr><td><code>cutscene</code></td><td><span class="tag rare">가끔</span></td><td>컷씬 중엔 충격 소리만 은은하게</td><td>max_s <code>300</code>, match 충격 단어 정규식, wave <code>seq</code>, gap <code>0.12</code></td></tr>
+</table>
+
+<h3>waves — 파형 문법</h3>
+<pre>"pguard": [[260, 18, 1.0, 5], [150, 25, 0.8, 8], [70, 130, 0.75, 55]],
+"charge": [[100, 30, 0.4, 12], 45, [100, 35, 0.55, 14]],
+"heal":   [{"swell": [70, 600, 0.35]}]
+
+[주파수 Hz, 길이 ms, 세기, 감쇠 ms]  = 짧은 타격 하나
+숫자 하나                            = 쉼 (ms)
+{"swell": [주파수, 길이, 세기]}       = 부풀었다 꺼지는 진동</pre>
+
+<h3>rules — 규칙 한 줄의 필드</h3>
+<pre>{"match": "^SE_PC_MT_Rustle_Attack_Charge", "wave": "charge", "who": "any", "player_control": true}</pre>
+<table>
+<tr><th>필드</th><th>필수</th><th>뜻</th></tr>
+<tr><td><code>match</code></td><td>필수</td><td>소리 이름 정규식</td></tr>
+<tr><td><code>wave</code></td><td>필수</td><td><code>waves</code> 사전의 이름</td></tr>
+<tr><td><code>who</code></td><td>선택</td><td>생략하면 내 소리일 때만. <code>"any"</code>면 주체 무관</td></tr>
+<tr><td><code>combat</code></td><td>선택</td><td>이 소리가 나면 전투 상태로 표시</td></tr>
+<tr><td><code>combat_only</code></td><td>선택</td><td>전투 상태일 때만 울림 (발소리)</td></tr>
+<tr><td><code>player_control</code></td><td>선택</td><td>이 소리가 나면 컷씬이 끝난 것으로 봄</td></tr>
+<tr><td><code>swing</code></td><td>선택</td><td><code>my_hit</code> 대체 규칙용 "방금 휘둘렀음" 표시</td></tr>
+</table>
+
+<h3>weather — 비·천둥</h3>
+<table>
+<tr><th>필드</th><th>입력값</th><th>뜻</th></tr>
+<tr><td><code>on</code></td><td><code>^AMB_SS_Rain|^AMB_OS_Thunder</code></td><td>이 소리가 나면 날씨 켜짐</td></tr>
+<tr><td><code>layer</code></td><td><code>^AMB_SS_Rain_(\w+?)_Set</code></td><td>괄호 부분 = 지금 비 맞는 재질 (PC=몸, Wood/Metal=지붕)</td></tr>
+<tr><td><code>hold</code> / <code>rate</code> / <code>peak</code></td><td><code>45</code> / <code>14</code> / <code>0.2</code></td><td>유지 초 / 초당 빗방울 / 최대 세기</td></tr>
+<tr><td><code>grains</code></td><td>PC, Wood(gain 0.25), Metal(gain 0.25, ring)</td><td>재질별 빗방울 파형</td></tr>
+<tr><td><code>rumble</code></td><td>Thunder, gap 18, chance 0.5, peak 0.35</td><td>천둥 럼블</td></tr>
+</table>
+
+<h2>2. 오공 — 코드 안에 있는 것들</h2>
+<div class="cols">
+<div class="card">
+<h3><code>dshaptics.py</code> 안 (사람이 고치는 값)</h3>
+<ul>
+<li><code>W</code> 합성 파형 19종</li>
+<li><code>RULES</code> 정규식 21줄 (이벤트 → 파형)</li>
+<li><code>HAPTIC_TRIM</code> 7줄 / <code>SPEAKER_TRIM</code> / <code>STOPS</code></li>
+<li><code>SPEAKER_ALLOW</code> 패드 스피커 허용 목록</li>
+<li>세기 상수: <code>HAPTIC_MASTER</code> 0.6, <code>DUCK</code> 0.3, <code>SFX_GAIN</code> 0.2, <code>STEP_PEAK</code> 0.18, <code>SEQ_GAIN</code> 2.0, <code>ENV_GAIN</code> 0.7 …</li>
+<li>트리거: <code>TRIG_SPIN_AMP</code> 2, <code>TRIG_SPIN_HZ</code> 12, <code>TRIG_SPIN_HOLD</code> 0.4</li>
+<li>내 타격 판정: <code>HIT_PROXY</code>, <code>MY_ATTACK</code>, <code>PUNCH</code>, <code>HIT_WINDOW</code> 0.8</li>
+</ul>
+</div>
+<div class="card">
+<h3>json (도구가 만든 데이터)</h3>
+<ul>
+<li><code>rules_auto.json</code> — LLM 분류 결과. 이벤트마다 class·weight·gain·snap</li>
+<li><code>sonmat-maker/profiles/wukong_auto/glossary.txt</code> · <code>overrides.json</code> — 분류기 힌트와 수동 덮어쓰기</li>
+<li><code>trees.json</code> · <code>trees_seq.json</code> — 이벤트 → 원본 음원 트리 (소리 준비가 만듦)</li>
+<li><code>layers_step_switch.json</code> — 바닥별 발소리 (소리 준비가 만듦)</li>
+</ul>
+<p class="muted">사람이 튜닝하는 값은 거의 다 왼쪽에 있어요.</p>
+</div>
+</div>
+<p>즉 오공은 아직 "게임별 코드"예요. 배포 원칙(json만 공유)을 지키려면 언젠가 P의 거짓과 같은 스키마로 옮겨야 해요. 옮길 때 새로 생기는 건 Wwise 쪽 입력(이벤트 이름·Switch) 정도고, 규칙 구조는 그대로 써요.</p>
+
+<h2>3. 새 기능을 넣으면 — 규칙 한 줄에 선택 필드</h2>
+<p>원칙: <b>json은 "어떤 이벤트에 무엇을"만</b>, "어떻게 만드는지"는 코드(공용 엔진)가 가져요. 새 기능마다 사전 하나 + 규칙 필드 하나씩만 늘어나요.</p>
+
+<h3>지금</h3>
+<pre>{"match": "^SE_PC_MT_Arm_Flamberge", "wave": "arm", "who": "any", "combat": true}</pre>
+
+<h3>추가 후 (전부 선택, 안 쓰면 지금과 똑같이 동작)</h3>
+<pre>{"match": "^SE_PC_MT_Arm_Flamberge", "wave": "arm", "who": "any", "combat": true,
+ <span class="new">"pan": -0.7,</span>                    <span class="muted">// -1 왼손 … 0 양손 … +1 오른손</span>
+ <span class="new">"trigger": {"L2": "flame"},</span>     <span class="muted">// triggers 사전 이름. 다음 변경 전까지 유지</span>
+ <span class="new">"light": "flame"</span>}                <span class="muted">// lights 사전 이름</span></pre>
+
+<h3>새로 생기는 사전 (waves 와 같은 방식)</h3>
+<pre><span class="new">"triggers"</span>: {
+  "flame":  {"mode": "vibrate", "amp": 2, "hz": 20},
+  "grab":   {"mode": "resist",  "start": 3, "force": 120},
+  "charge": {"mode": "weapon",  "start": 2, "end": 7, "force": 200},
+  "off":    {"mode": "off"}
+},
+<span class="new">"lights"</span>: {
+  "flame":  {"rgb": [255, 80, 20]},
+  "lowhp":  {"rgb": [200, 0, 0], "pulse": 1.2}
+},
+<span class="new">"beds"</span>: {                         <span class="muted">// weather 를 일반화. 비·바람·물속 같은 지속 질감</span>
+  "rain": { …지금 weather 내용 그대로… }
+}</pre>
+
+<table>
+<tr><th>기능</th><th>json 에 늘어나는 것</th><th>코드에 늘어나는 것</th></tr>
+<tr><td>좌우 pan</td><td>규칙 필드 <code>pan</code> 1개</td><td>믹서가 ch3·ch4에 다른 세기를 곱함 (몇 줄)</td></tr>
+<tr><td>트리거</td><td><code>triggers</code> 사전 + 규칙 필드 <code>trigger</code></td><td>오공의 <code>trig_vibrate</code>/<code>trig_resist</code>를 공용으로 옮김 + 무기모드 추가</td></tr>
+<tr><td>라이트바</td><td><code>lights</code> 사전 + 규칙 필드 <code>light</code></td><td>트리거와 같은 HID 출력 리포트에 RGB 3바이트</td></tr>
+<tr><td>상태 베드</td><td><code>weather</code> → <code>beds</code> 이름만 일반화</td><td>지금 비 생성기를 여러 개 돌릴 수 있게</td></tr>
+<tr><td>맞은 방향</td><td>없음 (자동)</td><td>DLL이 위치를 같이 보냄. 엔진별 1회</td></tr>
+</table>
+
+<h3>복잡도 정리</h3>
+<ul>
+<li>사람이 평소에 만지는 곳: <b>rules 한 줄</b>과 <b>master/duck</b>. 지금과 같아요.</li>
+<li>게임당 한 번: <code>player</code>, 사전 3~4개(waves·triggers·lights·beds). 대부분 다른 게임 것을 복사해서 이름만 바꾸면 돼요.</li>
+<li>자동: <code>native</code>.</li>
+<li>위험 신호: 규칙에 조건 필드(<code>if</code>, 상태 비교 같은 것)가 생기기 시작하면 json이 프로그래밍 언어가 돼요. 그 선은 넘지 않고, 그런 판정은 공용 코드의 이름 붙은 옵션(<code>combat_only</code> 같은)으로만 넣어요.</li>
+</ul>
+</main>
+</body>
+</html>

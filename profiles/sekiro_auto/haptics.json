@@ -1,0 +1,569 @@
+{
+ "name": "Sekiro: Shadows Die Twice",
+ "exe": "sekiro.exe",
+ "engine": "ue4",
+ "event_file": "C:\\Users\\Public\\dshaptics\\events_fmod.log",
+ "_run_note": "autosetup (fromsoft_fsb): the FMOD Ex hook (dll/dshaptics_fmodex.dll) reports a sound by its place in the bank - run tools/fmod_ids.py <id> once for the names. Slots from tools/autosetup.py; unnamed blows are picked by their shape when the sounds are prepared",
+ "triggers": {
+  "fire": {
+   "match": "^(?:bow\\-large\\-shot|bow\\-shot1|bow\\-shot2|bow\\-shot3|bowgun\\-shot)$",
+   "pad": "R2",
+   "effect": "vibrate",
+   "amp": 8,
+   "hz": 8,
+   "hold": 0.13
+  },
+  "charge": {
+   "match": "^(?:charge\\-comboattack|swing\\-stab\\-charge)$",
+   "pad": "R2",
+   "effect": "resist",
+   "force": 140,
+   "hold": 4,
+   "until": "^(?:bow\\-large\\-shot|bow\\-shot1|bow\\-shot2|bow\\-shot3|bowgun\\-shot)$"
+  },
+  "_note": "tools/autosetup.py: by slot and word, R2 (which trigger a game uses for what is not in its files) - nothing felt yet"
+ },
+ "player": ".",
+ "native": {
+  "dll": "dshaptics_fmodex.dll",
+  "places": "fmod_ids.json"
+ },
+ "source": {
+  "steam_dir": "Sekiro",
+  "trees": "trees.json",
+  "hap": "hap",
+  "spk": "spk",
+  "type": "fromsoft_fsb",
+  "auto_rules": "rules_auto.json",
+  "auto_gain": 0.6,
+  "archive": "Data1",
+  "archive_files": [
+   "/sound/main.fsb",
+   "/sound/smain.fsb"
+  ]
+ },
+ "master": 1.0,
+ "duck": 0.3,
+ "gap": 0.05,
+ "combat_hold": 6.0,
+ "waves": {
+  "_note": "parts play in sequence: [freq Hz, length ms, amp, decay ms] = burst, a number = gap ms, {\"swell\": [freq, ms, amp]}",
+  "impact": [
+   [
+    85,
+    60,
+    0.5,
+    24
+   ]
+  ],
+  "smash": [
+   [
+    60,
+    110,
+    0.8,
+    45
+   ]
+  ],
+  "pierce": [
+   [
+    250,
+    10,
+    0.55,
+    3
+   ]
+  ],
+  "blunt": [
+   [
+    55,
+    90,
+    0.45,
+    40
+   ]
+  ],
+  "guard": [
+   [
+    70,
+    90,
+    0.45,
+    35
+   ]
+  ],
+  "pguard": [
+   [
+    260,
+    18,
+    1.0,
+    5
+   ],
+   [
+    150,
+    25,
+    0.8,
+    8
+   ],
+   [
+    70,
+    130,
+    0.75,
+    55
+   ]
+  ],
+  "fatal": [
+   [
+    55,
+    90,
+    1.0,
+    40
+   ],
+   30,
+   [
+    45,
+    300,
+    0.85,
+    140
+   ]
+  ],
+  "stagger": [
+   [
+    200,
+    15,
+    0.8,
+    5
+   ],
+   [
+    70,
+    120,
+    0.8,
+    50
+   ]
+  ],
+  "hurt": [
+   [
+    70,
+    50,
+    0.6,
+    25
+   ]
+  ],
+  "struck": [
+   [
+    70,
+    60,
+    0.9,
+    30
+   ],
+   [
+    45,
+    140,
+    0.6,
+    70
+   ]
+  ],
+  "down": [
+   [
+    50,
+    120,
+    0.9,
+    50
+   ],
+   20,
+   [
+    40,
+    280,
+    0.6,
+    130
+   ]
+  ],
+  "death": [
+   [
+    50,
+    150,
+    1.0,
+    70
+   ],
+   40,
+   {
+    "swell": [
+     40,
+     900,
+     0.5
+    ]
+   }
+  ],
+  "swing": [
+   [
+    140,
+    25,
+    0.15,
+    10
+   ]
+  ],
+  "lunge": [
+   [
+    60,
+    90,
+    0.35,
+    40
+   ]
+  ],
+  "dodge": [
+   [
+    130,
+    30,
+    0.35,
+    12
+   ],
+   50,
+   [
+    130,
+    30,
+    0.3,
+    12
+   ]
+  ],
+  "land": [
+   [
+    60,
+    70,
+    0.35,
+    30
+   ]
+  ],
+  "step": [
+   [
+    65,
+    35,
+    0.15,
+    14
+   ]
+  ],
+  "ground": [
+   [
+    65,
+    35,
+    0.15,
+    14
+   ]
+  ],
+  "splash": [
+   [
+    110,
+    40,
+    0.12,
+    15
+   ]
+  ],
+  "charge": [
+   [
+    100,
+    30,
+    0.4,
+    12
+   ],
+   45,
+   [
+    100,
+    35,
+    0.55,
+    14
+   ]
+  ],
+  "heal": [
+   {
+    "swell": [
+     70,
+     600,
+     0.35
+    ]
+   }
+  ],
+  "buff": [
+   {
+    "swell": [
+     90,
+     400,
+     0.4
+    ]
+   }
+  ],
+  "uitick": [
+   [
+    220,
+    8,
+    0.15,
+    3
+   ]
+  ],
+  "click": [
+   [
+    180,
+    12,
+    0.4,
+    5
+   ],
+   30,
+   [
+    110,
+    40,
+    0.35,
+    15
+   ]
+  ],
+  "thud": [
+   [
+    55,
+    260,
+    0.4,
+    110
+   ]
+  ],
+  "break": [
+   [
+    80,
+    120,
+    0.5,
+    50
+   ]
+  ],
+  "boom": [
+   [
+    45,
+    220,
+    1.0,
+    120
+   ]
+  ],
+  "blast": [
+   [
+    50,
+    120,
+    1.0,
+    50
+   ],
+   [
+    40,
+    250,
+    0.6,
+    120
+   ]
+  ],
+  "seq": [
+   [
+    60,
+    160,
+    0.3,
+    70
+   ]
+  ],
+  "whoosh": [
+   [
+    120,
+    60,
+    0.35,
+    25
+   ]
+  ],
+  "soft": [
+   {
+    "swell": [
+     120,
+     200,
+     0.2
+    ]
+   }
+  ],
+  "tick": [
+   [
+    200,
+    15,
+    0.3,
+    5
+   ]
+  ],
+  "patter": [
+   [
+    180,
+    14,
+    0.3,
+    6
+   ]
+  ],
+  "spatter": [
+   [
+    230,
+    8,
+    0.25,
+    4
+   ]
+  ]
+ },
+ "rules": [
+  {
+   "match": "^(?:abnormal\\-status\\-blood|blood1|blood3|bone_damage2|bone_damage2b|bone_damage2c|c2250_blood|damage1|damage2|damage3|damage_SE|damage_SE2|damage_SE3|enemy_damage1|enemy_damage2|enemy_damage3|enemy_damage4|enemy_damage5|fdp_soulsword_stab|iron\\-stab\\-meat|iron\\-stab\\-meat2|p_damage1|p_damage2|p_damage3)$",
+   "wave": "hurt",
+   "who": "any",
+   "_slot": "hurt",
+   "combat": true
+  },
+  {
+   "match": "^(?:CURSOL_MOVE|body\\-armor\\-1|body\\-armor\\-2|body\\-armor\\-3|body\\-armor\\-4|body\\-armor\\-5|body\\-armor\\-6|body\\-armor\\-b4|body\\-armor\\-b5|body\\-lobe\\-1|body\\-lobe\\-2|body\\-lobe\\-3|body\\-lobe\\-4|body\\-lobe\\-5|downs2|dummy|fdp_soulsword_hit|hammer\\-hit1|hammer\\-hit2|iron\\-knock\\-iron|iron\\-knock\\-meat|iron\\-knock\\-meat2|iron\\-knock\\-stone|iron\\-knock\\-stone2|iron\\-knock\\-wood|iron\\-stab\\-iron|iron\\-stab\\-wood|kill\\-kick|large\\-weapon\\-hit|meat\\-knock\\-iron|meat\\-knock\\-iron2|meat\\-knock\\-iron3|meat\\-knock\\-meat|meat\\-knock\\-meat2|meat\\-knock\\-stone2|meat\\-knock\\-wood|meat\\-knock\\-wood2|shield\\-iron1|shield\\-iron1_large|shield\\-iron2|swing\\-knock|swing\\-knock\\-large|wood\\-knock\\-iron|wood\\-knock\\-iron2|wood\\-knock\\-meat|wood\\-knock\\-stone|wood\\-knock\\-stone2|wood\\-knock\\-wood|wood\\-knock\\-wood2|wood1)$",
+   "wave": "impact",
+   "who": "any",
+   "_slot": "hit",
+   "combat": true
+  },
+  {
+   "match": "^(?:fragment|fragment2)$",
+   "wave": "blast",
+   "who": "any",
+   "_slot": "blast"
+  },
+  {
+   "match": "^(?:charge\\-comboattack|swing\\-stab\\-charge)$",
+   "wave": "charge",
+   "who": "any",
+   "_slot": "charge",
+   "player_control": true,
+   "synth": true
+  },
+  {
+   "match": "^(?:bow\\-large\\-shot|bow\\-shot1|bow\\-shot2|bow\\-shot3|bowgun\\-shot|large\\-weapon\\-pullout)$",
+   "wave": "tick",
+   "who": "any",
+   "_slot": "shot"
+  },
+  {
+   "match": "^(?:miracle\\-healing)$",
+   "wave": "heal",
+   "who": "any",
+   "_slot": "heal",
+   "synth": true
+  },
+  {
+   "match": "^(?:body\\-hauberk\\-1|body\\-hauberk\\-2|body\\-hauberk\\-3|body\\-hauberk\\-4|body\\-hauberk\\-5|fdp_soulsword_swing|swing\\-hand|swing\\-katana|swing\\-stab|swing\\-stab2|swing\\-stab3|swing\\-stab3b|swing\\-stab3c|swing\\-stab3d|swing\\-sword|swing\\-sword2|swing\\-throw|sword\\-x\\-sword1|sword\\-x\\-sword2|sword\\-x\\-sword3|taimatsu_swing)$",
+   "wave": "swing",
+   "who": "any",
+   "_slot": "swing",
+   "combat": true,
+   "player_control": true
+  },
+  {
+   "match": "^(?:body\\-lobe\\-rolling)$",
+   "wave": "dodge",
+   "who": "any",
+   "_slot": "dodge",
+   "combat": true,
+   "player_control": true,
+   "synth": true
+  },
+  {
+   "match": "^(?:kama_land)$",
+   "wave": "land",
+   "who": "any",
+   "_slot": "land",
+   "player_control": true,
+   "synth": true
+  },
+  {
+   "match": "^(?:EST\\-drink|foot\\-grass\\-l|foot\\-grass\\-r1|foot\\-grass\\-r2|foot\\-grass\\-r3|foot\\-grass\\-w1|foot\\-grass\\-w2|foot\\-grass\\-w3|foot2|iron\\-cut\\-iron|iron\\-cut\\-iron2|iron\\-cut\\-iron3|iron\\-cut\\-stone|iron\\-cut\\-stone2|iron\\-cut\\-wood|movement1|movement2)$",
+   "wave": "soft",
+   "who": "any",
+   "_slot": "touch",
+   "synth": true
+  },
+  {
+   "match": "^(?:foot\\-stone\\-l|foot\\-stone\\-ra1|foot\\-stone\\-ra2|foot\\-stone\\-ra3|foot\\-stone\\-wa1|foot\\-stone\\-wa2|foot\\-stone\\-wa3|iron\\-stab\\-stone)$",
+   "wave": "click",
+   "who": "any",
+   "_slot": "click"
+  }
+ ],
+ "style": {
+  "hit": "sb",
+  "rough": "hit",
+  "top": "$^",
+  "skip": "^(charge|click|dodge|heal|land|soft|swing|tick)$|^(?:charge\\-comboattack|swing\\-stab\\-charge)$|^(?:bow\\-large\\-shot|bow\\-shot1|bow\\-shot2|bow\\-shot3|bowgun\\-shot|large\\-weapon\\-pullout)$|^(?:miracle\\-healing)$|^(?:body\\-hauberk\\-1|body\\-hauberk\\-2|body\\-hauberk\\-3|body\\-hauberk\\-4|body\\-hauberk\\-5|fdp_soulsword_swing|swing\\-hand|swing\\-katana|swing\\-stab|swing\\-stab2|swing\\-stab3|swing\\-stab3b|swing\\-stab3c|swing\\-stab3d|swing\\-sword|swing\\-sword2|swing\\-throw|sword\\-x\\-sword1|sword\\-x\\-sword2|sword\\-x\\-sword3|taimatsu_swing)$|^(?:body\\-lobe\\-rolling)$|^(?:kama_land)$|^(?:EST\\-drink|foot\\-grass\\-l|foot\\-grass\\-r1|foot\\-grass\\-r2|foot\\-grass\\-r3|foot\\-grass\\-w1|foot\\-grass\\-w2|foot\\-grass\\-w3|foot2|iron\\-cut\\-iron|iron\\-cut\\-iron2|iron\\-cut\\-iron3|iron\\-cut\\-stone|iron\\-cut\\-stone2|iron\\-cut\\-wood|movement1|movement2)$|^(?:foot\\-stone\\-l|foot\\-stone\\-ra1|foot\\-stone\\-ra2|foot\\-stone\\-ra3|foot\\-stone\\-wa1|foot\\-stone\\-wa2|foot\\-stone\\-wa3|iron\\-stab\\-stone)$"
+ },
+ "rough": {
+  "impact": "hit",
+  "smash": "hit_m",
+  "pierce": "stab",
+  "blunt": "blunt",
+  "guard": "guard",
+  "pguard": "pguard",
+  "fatal": "fatal",
+  "stagger": "stagger",
+  "hurt": "hit",
+  "struck": "hit",
+  "down": "down",
+  "death": "knockdown",
+  "swing": "swing",
+  "lunge": "swing_l",
+  "dodge": "roll",
+  "land": "land_heavy",
+  "step": "step",
+  "ground": "step_sand",
+  "splash": "step_water",
+  "charge": "charged",
+  "heal": "heal",
+  "buff": "buff",
+  "uitick": "uitick",
+  "click": "click",
+  "thud": "thud",
+  "break": "hit_wood",
+  "boom": "blast",
+  "blast": "blast",
+  "seq": "hit_s",
+  "whoosh": "swing_l",
+  "soft": "item",
+  "tick": "shot_s",
+  "patter": "shot_s",
+  "spatter": "hit_s"
+ },
+ "haptic_trim": [
+  [
+   "^(?:abnormal\\-status\\-blood|blood1|blood3|bone_damage2|bone_damage2b|bone_damage2c|c2250_blood|damage1|damage2|damage3|damage_SE|damage_SE2|damage_SE3|enemy_damage1|enemy_damage2|enemy_damage3|enemy_damage4|enemy_damage5|fdp_soulsword_stab|iron\\-stab\\-meat|iron\\-stab\\-meat2|p_damage1|p_damage2|p_damage3)$",
+   0.8
+  ],
+  [
+   "^(?:CURSOL_MOVE|body\\-armor\\-1|body\\-armor\\-2|body\\-armor\\-3|body\\-armor\\-4|body\\-armor\\-5|body\\-armor\\-6|body\\-armor\\-b4|body\\-armor\\-b5|body\\-lobe\\-1|body\\-lobe\\-2|body\\-lobe\\-3|body\\-lobe\\-4|body\\-lobe\\-5|downs2|dummy|fdp_soulsword_hit|hammer\\-hit1|hammer\\-hit2|iron\\-knock\\-iron|iron\\-knock\\-meat|iron\\-knock\\-meat2|iron\\-knock\\-stone|iron\\-knock\\-stone2|iron\\-knock\\-wood|iron\\-stab\\-iron|iron\\-stab\\-wood|kill\\-kick|large\\-weapon\\-hit|meat\\-knock\\-iron|meat\\-knock\\-iron2|meat\\-knock\\-iron3|meat\\-knock\\-meat|meat\\-knock\\-meat2|meat\\-knock\\-stone2|meat\\-knock\\-wood|meat\\-knock\\-wood2|shield\\-iron1|shield\\-iron1_large|shield\\-iron2|swing\\-knock|swing\\-knock\\-large|wood\\-knock\\-iron|wood\\-knock\\-iron2|wood\\-knock\\-meat|wood\\-knock\\-stone|wood\\-knock\\-stone2|wood\\-knock\\-wood|wood\\-knock\\-wood2|wood1)$",
+   0.9
+  ],
+  [
+   "^(?:fragment|fragment2)$",
+   0.8
+  ],
+  [
+   "^(?:bow\\-large\\-shot|bow\\-shot1|bow\\-shot2|bow\\-shot3|bowgun\\-shot|large\\-weapon\\-pullout)$",
+   0.5
+  ],
+  [
+   "^(?:body\\-hauberk\\-1|body\\-hauberk\\-2|body\\-hauberk\\-3|body\\-hauberk\\-4|body\\-hauberk\\-5|fdp_soulsword_swing|swing\\-hand|swing\\-katana|swing\\-stab|swing\\-stab2|swing\\-stab3|swing\\-stab3b|swing\\-stab3c|swing\\-stab3d|swing\\-sword|swing\\-sword2|swing\\-throw|sword\\-x\\-sword1|sword\\-x\\-sword2|sword\\-x\\-sword3|taimatsu_swing)$",
+   0.35
+  ],
+  [
+   "^(?:foot\\-stone\\-l|foot\\-stone\\-ra1|foot\\-stone\\-ra2|foot\\-stone\\-ra3|foot\\-stone\\-wa1|foot\\-stone\\-wa2|foot\\-stone\\-wa3|iron\\-stab\\-stone)$",
+   0.5
+  ]
+ ],
+ "speaker": {
+  "gain": 0.7,
+  "all": false
+ },
+ "cutscene": {
+  "gain": 2.0,
+  "skip_grace": 2.0,
+  "max_s": 300,
+  "match": "impact|hit|crash|explo|break|slam|fall|door|gun|clash|stab|thud",
+  "wave": "seq",
+  "gap": 0.12
+ },
+ "clips": {
+  "trees": "trees.json",
+  "hap": "hap",
+  "spk": "spk",
+  "auto_rules": "rules_auto.json"
+ },
+ "snap": "$^",
+ "_made": "tools/new_profile.py from profiles/_model/model.json - first values, not felt yet"
+}
