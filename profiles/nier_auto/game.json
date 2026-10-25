@@ -55,10 +55,12 @@
   },
   "_note": "tools/autosetup.py: by slot and word, R2 (which trigger a game uses for what is not in its files) - nothing felt yet"
  },
- "native": {
-  "dll": "nier_auto/dshaptics_wwise_wide.dll",
-  "event_ids": "event_ids.json",
-  "main": true
+ "hook": {
+  "native": {
+   "dll": "dshaptics_wwise_wide.dll",
+   "event_ids": "event_ids.json",
+   "main": true
+  }
  },
  "source": {
   "steam_dir": "NieRAutomata",

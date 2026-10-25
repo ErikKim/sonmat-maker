@@ -1,0 +1,12 @@
+{
+ "_about": "게임 연결: 이 게임을 분석해서 얻은 값 전부(훅 DLL·바이트 패턴·UE4SS 와 이 빌드에 필요한 것). tools/hooks.py 가 이것만 보고 게임 폴더에 파일을 통째로 쓴다(sonmat_paths.load_hook)",
+ "ue4ss": {
+  "mods": [
+   "DSHaptics"
+  ]
+ },
+ "native": {
+  "dll": "dshaptics_wwise.dll",
+  "event_ids": "event_ids.json"
+ }
+}

@@ -1,4 +1,4 @@
-"""Find what dshaptics_ue4.dll needs in a UE4 game exe and print the profile's "native" section.
+"""Find what dshaptics_ue4.dll needs in a UE4 game exe and print the "native" section of its hook.json.
 
     python3 find_ue4_audio.py <Game-Win64-Shipping.exe> <UE4SS.log from one run of that exe>
 
@@ -123,7 +123,7 @@ add, A, ins, cstart, cend = r
 snd, own = offsets(A, ins, cstart, cend)
 ts = tostring_rva()
 add_rva = add - BASE
-native = {
+sigs = {
     "_note": f"tools/find_ue4_audio.py: {exe.split('/')[-1]} {len(data):,} bytes. Patterns first, +rva = this exact build",
     "AddNewActiveSound": [pattern(add), f"+{add_rva:x}"],
     "FNameToString": [pattern(BASE + ts), f"+{ts:x}"] if ts else ["FILL: run the game once with UE4SS and pass its UE4SS.log"],
@@ -131,4 +131,4 @@ native = {
     "OwnerNameOffset": f"{own:x}" if own is not None else "FILL",
 }
 print(f"execPlaySound2D {thunk:#x}  AddNewActiveSound {add:#x}  FActiveSound at rbp{A:+#x}", file=sys.stderr)
-print(json.dumps({"native": native}, indent=2))
+print(json.dumps({"native": {"dll": "dshaptics_ue4.dll", "sigs": sigs}}, indent=2))

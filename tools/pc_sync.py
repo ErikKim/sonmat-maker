@@ -2,15 +2,14 @@
 
     python pc_sync.py manifest <root>            -> json {relative path: [sha1, mtime]} of the code files
     python pc_sync.py backup <root> <list.txt>   -> zips the listed files that exist into _backup/<stamp>.zip
-    python pc_sync.py build <root>               -> builds the loader DLL and paktool, prints what happened
+    python pc_sync.py build <root>               -> fetches the parts (hook DLLs, loader: tools/partfetch.py) and builds paktool
 
-"Code files" = what the Mac owns. Sound folders (sounds/, the old pad_sfx*), built DLLs, logs and dll/sigs*.txt belong to
+"Code files" = what the Mac owns. Sound folders (sounds/, the old pad_sfx*), built DLLs, parts/, logs and dll/sigs*.txt belong to
 the PC and are never listed, so a deploy cannot overwrite them.
 """
 import glob, hashlib, json, os, subprocess, sys, time, zipfile
 
 INCLUDE = ["*.py", "*.bat", "*.ico", "README.md", "ROADMAP.md", "profiles/**", "data/**", "tools/**", "mods/**", "docs/**",
-           "dll/*.cpp", "dll/*.h", "dll/*.bat", "dll/*.py",
            "app/src/**", "app/profiles/**", "app/mock/**"]
 SKIP = ("__pycache__", "/bin/", "/obj/", ".DS_Store", ".bak", "/._")
 # the old daemons were removed from the PC on 2026-10-07: never send them
@@ -52,7 +51,9 @@ def build(root):
             for l in tail: print("   " + l)
         except Exception as e:
             print(f"== {title}: could not run ({e})")
-    run("loader dll (dll\\build.bat dshaptics_loader)", "build.bat dshaptics_loader", os.path.join(root, "dll"))
+    # the hook DLLs and the loader are parts now (sonmat-loader, sonmat-hook-*: each its own repo, 10-21); private repos
+    # need SONMAT_GITHUB_TOKEN on the PC. A PC copy that still has its own dll/ keeps using it when no part is there
+    run("parts (tools/partfetch.py all)", f'"{sys.executable}" tools/partfetch.py all', root)
     run("paktool (dotnet build)", "dotnet build -c Release -nologo -v q", os.path.join(root, "tools", "paktool"))
     run("app (dotnet build)", "dotnet build -c Release -nologo -v q", os.path.join(root, "app", "src"))
     run("hapticsd imports", f'"{sys.executable}" -c "import numpy, sounddevice, hid, scipy; print(1)"', root)
