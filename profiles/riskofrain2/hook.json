@@ -1,0 +1,7 @@
+{
+ "bepinex": {},
+ "native": {
+  "event_ids": "event_ids.json",
+  "main": true
+ }
+}

@@ -1,0 +1,604 @@
+{
+ "name": "Risk of Rain 2",
+ "name_ko": "리스크 오브 레인 2",
+ "exe": "Risk of Rain 2.exe",
+ "engine": "wwise",
+ "event_file": "C:\\Users\\Public\\dshaptics\\events_unity.log",
+ "_run_note": "Unity + Wwise. Hook = BepInEx 5 + SonmatUnity.dll (part sonmat-unity): every sound by name, with its owner (GameObject). Sounds = the game's own Wwise banks (unity_wwise reader, as autosetup). The DualSense reaches the game through Steam Input / XInput; the game's own vibration (screen shake, RoR2.dll DefaultGamepadVibrationController) is cut by sonmat_rumble.dll when the switch is off.",
+ "_controls_note": "Pad layout = the usual default (not readable from this install: no Rewired InputManager in level0; from general knowledge): R2 = primary skill (held = auto-fire), L2 = secondary, L1 = utility, R1 = special, A/cross = jump, Y/triangle = interact, X/square = equipment. One mode: third-person shooter, 17+ survivors, each with m1/m2/shift/R (or skill1..4) sounds named after it. The biggest moments: the boss spawning (Play_boss_spawn_rumble), the teleporter finishing (Play_UI_teleporter_event_complete), a boss dying, my death, the drop pod landing at the start of a stage.",
+ "_places_note": "Stages are open maps (plains, desert, snow, lakes, caves, the moon); no vehicles, no water you swim in. Geysers launch you (Play_env_geyser_launch). No floor switch: one footstep name for every ground.",
+ "_owner_note": "Owners: my body plays Play_Player_footstep, my jumps and landings; my shots and their hits are played by the projectiles (a new GameObject each) - so shots go by the survivor's name (only my survivor's names come in solo), not by owner. Play_UI_hit / Play_UI_crit = MY damage landing (a hit marker, UI object), Play_UI_takeDamage = I am hurt. <monster>_impact = that monster being hit (by me or my drones): not used, UI_hit says it once.",
+ "player": "^Play_Player_footstep$",
+ "source": {
+  "steam_dir": "Risk of Rain 2",
+  "trees": "trees.json",
+  "hap": "hap",
+  "spk": "spk",
+  "type": "wwise_bnk",
+  "data": "Risk of Rain 2_Data/StreamingAssets/Audio/GeneratedSoundBanks/Windows",
+  "event_ids": "event_ids.json",
+  "speaker": "^Play_UI_(?:item_pickup|levelUp_player)$"
+ },
+ "speaker": {
+  "gain": 0.7,
+  "all": false,
+  "allow": "^Play_UI_(?:item_pickup|levelUp_player)$"
+ },
+ "triggers": {
+  "_note": "R2 = primary (held = auto-fire): a light kick on each of my primary shots. L2 = secondary: one firmer kick when it goes off. First values, not felt.",
+  "primary": {
+   "match": "^Play_(?:commando_M1|(?:GG_CHAR_|DLC4_Skills_)?(?:commando|Commano|huntress|Huntress|bandit2|MULT|engi|Engi|mage|merc|treeBot|loader|acrid|captain|railgunner|voidman|[Ss]eeker|[Cc]hef|FalseSon|falseson|[Dd]rifter|DroneTech|heretic)_(?:m1|M1|skill1|Primary)\\w*(?:shoot|shot|fire|Fire|rifle|shotgun|cast_lightning|_Shoot_\\w+|shootWide|shootTight))$",
+   "pad": "R2",
+   "effect": "vibrate",
+   "amp": 4,
+   "hz": 9,
+   "hold": 0.08
+  },
+  "secondary": {
+   "match": "^Play_(?:commando_M2_grenade_throw|(?:GG_CHAR_|DLC4_Skills_)?(?:commando|Commano|huntress|Huntress|bandit2|MULT|engi|Engi|mage|merc|treeBot|loader|acrid|captain|railgunner|voidman|[Ss]eeker|[Cc]hef|FalseSon|falseson|[Dd]rifter|DroneTech|heretic)_(?:m2|M2|skill2|Secondary)\\w*(?:shoot|shot|fire|Fire|throw|launch|Launch|toss|lunge|shoot_fullCharge))$",
+   "pad": "L2",
+   "effect": "vibrate",
+   "amp": 8,
+   "hz": 9,
+   "hold": 0.13
+  }
+ },
+ "master": 1.0,
+ "duck": 0.3,
+ "gap": 0.05,
+ "combat_hold": 6.0,
+ "waves": {
+  "impact": [
+   [
+    85,
+    60,
+    0.5,
+    24
+   ]
+  ],
+  "smash": [
+   [
+    60,
+    110,
+    0.8,
+    45
+   ]
+  ],
+  "fatal": [
+   [
+    55,
+    90,
+    1.0,
+    40
+   ],
+   30,
+   [
+    45,
+    300,
+    0.85,
+    140
+   ]
+  ],
+  "stagger": [
+   [
+    200,
+    15,
+    0.8,
+    5
+   ],
+   [
+    70,
+    120,
+    0.8,
+    50
+   ]
+  ],
+  "hurt": [
+   [
+    70,
+    60,
+    0.95,
+    25
+   ]
+  ],
+  "struck": [
+   [
+    70,
+    60,
+    0.9,
+    30
+   ],
+   [
+    45,
+    140,
+    0.6,
+    70
+   ]
+  ],
+  "death": [
+   [
+    50,
+    150,
+    1.0,
+    70
+   ],
+   40,
+   {
+    "swell": [
+     40,
+     900,
+     0.5
+    ]
+   }
+  ],
+  "dodge": [
+   [
+    130,
+    30,
+    0.35,
+    12
+   ],
+   50,
+   [
+    130,
+    30,
+    0.3,
+    12
+   ]
+  ],
+  "land": [
+   [
+    60,
+    70,
+    0.35,
+    30
+   ]
+  ],
+  "charge": [
+   [
+    100,
+    30,
+    0.4,
+    12
+   ],
+   45,
+   [
+    100,
+    35,
+    0.55,
+    14
+   ]
+  ],
+  "heal": [
+   {
+    "swell": [
+     70,
+     600,
+     0.35
+    ]
+   }
+  ],
+  "buff": [
+   {
+    "swell": [
+     90,
+     400,
+     0.4
+    ]
+   }
+  ],
+  "thud": [
+   [
+    55,
+    260,
+    0.4,
+    110
+   ]
+  ],
+  "boom": [
+   [
+    45,
+    220,
+    1.0,
+    120
+   ]
+  ],
+  "blast": [
+   [
+    50,
+    120,
+    1.0,
+    50
+   ],
+   [
+    40,
+    250,
+    0.6,
+    120
+   ]
+  ],
+  "seq": [
+   [
+    60,
+    160,
+    0.3,
+    70
+   ]
+  ],
+  "soft": [
+   {
+    "swell": [
+     120,
+     200,
+     0.2
+    ]
+   }
+  ],
+  "tick": [
+   [
+    200,
+    15,
+    0.3,
+    5
+   ]
+  ],
+  "patter": [
+   [
+    180,
+    14,
+    0.3,
+    6
+   ]
+  ],
+  "spatter": [
+   [
+    230,
+    8,
+    0.25,
+    4
+   ]
+  ],
+  "quake": [
+   {
+    "swell": [
+     38,
+     1200,
+     0.45
+    ]
+   }
+  ],
+  "warp": [
+   {
+    "swell": [
+     60,
+     500,
+     0.45
+    ]
+   },
+   [
+    90,
+    40,
+    0.5,
+    15
+   ]
+  ],
+  "hold": [
+   [
+    150,
+    60,
+    0.18,
+    40
+   ]
+  ],
+  "marker": [
+   [
+    95,
+    22,
+    0.24,
+    9
+   ]
+  ]
+ },
+ "beds": {
+  "hold:Play_(?:huntress_R_rain_loop|MULT_m1_sawblade_active_loop)": {
+   "every": 0.07,
+   "vary": 0.7,
+   "max": 30,
+   "on": "^Play_(?:huntress_R_rain_loop|MULT_m1_sawblade_active_loop)$",
+   "off": "^Stop_Play_(?:huntress_R_rain_loop|MULT_m1_sawblade_active_loop)$",
+   "wave": "hold"
+  }
+ },
+ "rules": [
+  {
+   "match": "^Stop_",
+   "_note": "Wwise stop events carry the name of what they stop: never a vibration"
+  },
+  {
+   "match": "^Play_UI_teleporter_event_complete$",
+   "wave": "fatal",
+   "who": "any",
+   "_slot": "finisher",
+   "combat": true
+  },
+  {
+   "match": "^Play_(?:(?:Boss_\\w+|GG_Boss_\\w+|boss_falseson)_[Dd]eath|beetle_queen_death|titanboss_death|vagrant_death|clayboss_death|grandParent_death|gravekeeper_death|magmaWorm_death|electricWorm_death|roboBallBoss_death|scav_death|artifactBoss_death)$",
+   "wave": "stagger",
+   "who": "any",
+   "_slot": "stagger",
+   "combat": true
+  },
+  {
+   "match": "^Play_ui_player_death$",
+   "wave": "death",
+   "who": "any",
+   "_slot": "death",
+   "combat": true
+  },
+  {
+   "match": "^Play_char_land_fall_damage$",
+   "wave": "struck",
+   "who": "any",
+   "_slot": "struck",
+   "combat": true
+  },
+  {
+   "match": "^Play_UI_takeDamage$",
+   "wave": "hurt",
+   "who": "any",
+   "_slot": "hurt",
+   "combat": true,
+   "synth": true
+  },
+  {
+   "match": "^Play_(?:merc|loader|acrid|falseson|GG_CHAR_Drifter|treeBot_m1_3rd)_\\w*(?:sword_impact|m1_impact|m2_impact|bigSlash|_hit|Slap|BluntForce_0\\d|skill1_impact\\w*|dash_impact|R_variant_slam|uppercut)$",
+   "wave": "smash",
+   "who": "any",
+   "_slot": "hit_heavy",
+   "combat": true
+  },
+  {
+   "match": "^Play_UI_hit$",
+   "wave": "marker",
+   "who": "any",
+   "_slot": "hit_light",
+   "combat": true,
+   "gap": 0.08,
+   "synth": true
+  },
+  {
+   "match": "^Play_UI_crit$",
+   "wave": "impact",
+   "who": "any",
+   "_slot": "hit",
+   "combat": true,
+   "synth": true
+  },
+  {
+   "match": "^Play_(?:vagrant|titanboss|clayboss|beetle_queen|grandParent|gravekeeper|magmaWorm|electricWorm|roboBallBoss|scav|moonBrother|voidRaid|artifactBoss|Boss_\\w+?|GG_Boss_\\w+?|boss_falseson)_\\w*(?:explode|explo|fist|slam|clap|Slam|Explode)$",
+   "wave": "boom",
+   "who": "any",
+   "_slot": "boom"
+  },
+  {
+   "match": "^Play_(?:GG_CHAR_|DLC4_Skills_)?(?:commando|Commano|huntress|Huntress|bandit2|MULT|engi|Engi|mage|merc|treeBot|loader|acrid|captain|railgunner|voidman|[Ss]eeker|[Cc]hef|FalseSon|falseson|[Dd]rifter|DroneTech|heretic)_\\w*(?:explo|explode|Explode|Explos\\w*|lightningBlast|R_pop|shock)$",
+   "wave": "blast",
+   "who": "any",
+   "_slot": "blast"
+  },
+  {
+   "match": "^Play_(?:GG_CHAR_|DLC4_Skills_)?(?:commando|Commano|huntress|Huntress|bandit2|MULT|engi|Engi|mage|merc|treeBot|loader|acrid|captain|railgunner|voidman|[Ss]eeker|[Cc]hef|FalseSon|falseson|[Dd]rifter|DroneTech|heretic)_\\w*(?:[Cc]harge(?:Up|1|2|3|_start)?|chargeStart|readyBow|Windup|buildup)$",
+   "wave": "charge",
+   "who": "me",
+   "_slot": "charge",
+   "player_control": true
+  },
+  {
+   "match": "^Play_(?:commando_M1|(?:GG_CHAR_|DLC4_Skills_)?(?:commando|Commano|huntress|Huntress|bandit2|MULT|engi|Engi|mage|merc|treeBot|loader|acrid|captain|railgunner|voidman|[Ss]eeker|[Cc]hef|FalseSon|falseson|[Dd]rifter|DroneTech|heretic)_(?:m1|M1|skill1|Primary)\\w*(?:shoot|shot|fire|Fire|rifle|shotgun|cast_lightning|_Shoot_\\w+|shootWide|shootTight))$",
+   "wave": "patter",
+   "who": "any",
+   "_slot": "stream",
+   "gap": 0.12
+  },
+  {
+   "match": "^Play_(?:commando_R|commando_M2_grenade_throw|(?:GG_CHAR_|DLC4_Skills_)?(?:commando|Commano|huntress|Huntress|bandit2|MULT|engi|Engi|mage|merc|treeBot|loader|acrid|captain|railgunner|voidman|[Ss]eeker|[Cc]hef|FalseSon|falseson|[Dd]rifter|DroneTech|heretic)_(?:m2|M2|R|skill2|skill4|Secondary|Special|SpecialAlt|R_snipe|R_alt|R_variant)\\w*(?:shoot|shot|fire|Fire|throw|launch|Launch|toss|lunge|shoot_fullCharge))$",
+   "wave": "tick",
+   "who": "any",
+   "_slot": "shot"
+  },
+  {
+   "match": "^Play_item_proc_\\w*(?:explo|explode|impact)\\w*$|^Play_item_use_AP_round_impact$",
+   "wave": "spatter",
+   "who": "any",
+   "_slot": "shot_hit",
+   "gap": 0.15
+  },
+  {
+   "match": "^Play_(?:golem_laser_charge|titanboss_R_laser_preshoot|titanboss_m2_charge|titanboss_shift_charge|vagrant_attack2_charge|vagrant_R_charge|(?:vagrant|titanboss|clayboss|beetle_queen|grandParent|gravekeeper|magmaWorm|electricWorm|roboBallBoss|scav|moonBrother|voidRaid|artifactBoss|Boss_\\w+?|GG_Boss_\\w+?|boss_falseson)_\\w*(?:[Cc]harge|preshoot|PreFire|Windup)\\w*)$",
+   "wave": "soft",
+   "who": "any",
+   "_slot": "telegraph"
+  },
+  {
+   "match": "^Play_(?:golem_laser_fire|titanboss_R_laser_shoot|titanboss_shift_shoot|vagrant_attack2_shoot|(?:vagrant|titanboss|clayboss|beetle_queen|grandParent|gravekeeper|magmaWorm|electricWorm|roboBallBoss|scav|moonBrother|voidRaid|artifactBoss|Boss_\\w+?|GG_Boss_\\w+?|boss_falseson)_\\w*(?:superLaser\\w*|Laser\\w*_Fire|laser_shoot|LaserBurst))$",
+   "wave": "thud",
+   "who": "any",
+   "_slot": "beam"
+  },
+  {
+   "match": "^Play_UI_shrineActivate$|^Play_ui_teleporter_activate$",
+   "wave": "buff",
+   "who": "any",
+   "_slot": "buff"
+  },
+  {
+   "match": "^Play_item_proc_(?:infusion|personal_shield_recharge|medkit|healingPotion\\w*)$",
+   "wave": "heal",
+   "who": "any",
+   "_slot": "heal"
+  },
+  {
+   "match": "^Play_(?:GG_CHAR_|DLC4_Skills_)?(?:commando|Commano|huntress|Huntress|bandit2|MULT|engi|Engi|mage|merc|treeBot|loader|acrid|captain|railgunner|voidman|[Ss]eeker|[Cc]hef|FalseSon|falseson|[Dd]rifter|DroneTech|heretic)_(?:shift|utility|Utility|skill3)\\w*(?:start|Start|enter|dash|Dash|blink|activate|Activate|jump|release|slice)$",
+   "wave": "dodge",
+   "who": "me",
+   "_slot": "dodge",
+   "combat": true,
+   "player_control": true
+  },
+  {
+   "match": "^Play_(?:huntress_R_jump|GG_CHAR_Drifter_Jump|acrid_shift_jump)$",
+   "wave": "soft",
+   "who": "me",
+   "_slot": "jump",
+   "player_control": true
+  },
+  {
+   "match": "^Play_(?:char_land|acrid_shift_land|railgunner_shift_land|GG_CHAR_Drifter_Land)$",
+   "wave": "land",
+   "who": "me",
+   "_slot": "land",
+   "player_control": true
+  },
+  {
+   "match": "^Play_UI_(?:item_pickup|chest_unlock|barrel_open|tripleChestShutter|lunarCache_open)$",
+   "wave": "soft",
+   "who": "any",
+   "_slot": "touch"
+  },
+  {
+   "match": "^Play_(?:boss_spawn_rumble|titanboss_step|titanboss_spawn|beetle_queen_spawn|clayboss_spawn|golem_clap|UI_podImpact|env_geyser_launch|mage_shift_wall_pre_explode_rumble)$",
+   "wave": "quake",
+   "who": "any",
+   "_slot": "quake"
+  },
+  {
+   "match": "^Play_(?:UI_charTeleport|UI_teleport_off_map|huntress_shift_mini_blink)$",
+   "wave": "warp",
+   "who": "any",
+   "_slot": "warp"
+  },
+  {
+   "match": "^Play_(?:huntress_R_rain_loop|MULT_m1_sawblade_active_loop)$",
+   "wave": "hold",
+   "who": "any",
+   "_slot": "hold",
+   "synth": true
+  }
+ ],
+ "style": {
+  "hit": "sb",
+  "rough": "hit",
+  "top": "^Play_UI_teleporter_event_complete$|^fatal$|^Play_(?:(?:Boss_\\w+|GG_Boss_\\w+|boss_falseson)_[Dd]eath|beetle_queen_death|titanboss_death|vagrant_death|clayboss_death|grandParent_death|gravekeeper_death|magmaWorm_death|electricWorm_death|roboBallBoss_death|scav_death|artifactBoss_death)$|^stagger$",
+  "skip": "^(buff|charge|dodge|heal|land|patter|soft|spatter|thud|tick)$|^Play_(?:GG_CHAR_|DLC4_Skills_)?(?:commando|Commano|huntress|Huntress|bandit2|MULT|engi|Engi|mage|merc|treeBot|loader|acrid|captain|railgunner|voidman|[Ss]eeker|[Cc]hef|FalseSon|falseson|[Dd]rifter|DroneTech|heretic)_\\w*(?:[Cc]harge(?:Up|1|2|3|_start)?|chargeStart|readyBow|Windup|buildup)$|^Play_(?:commando_M1|(?:GG_CHAR_|DLC4_Skills_)?(?:commando|Commano|huntress|Huntress|bandit2|MULT|engi|Engi|mage|merc|treeBot|loader|acrid|captain|railgunner|voidman|[Ss]eeker|[Cc]hef|FalseSon|falseson|[Dd]rifter|DroneTech|heretic)_(?:m1|M1|skill1|Primary)\\w*(?:shoot|shot|fire|Fire|rifle|shotgun|cast_lightning|_Shoot_\\w+|shootWide|shootTight))$|^Play_(?:commando_R|commando_M2_grenade_throw|(?:GG_CHAR_|DLC4_Skills_)?(?:commando|Commano|huntress|Huntress|bandit2|MULT|engi|Engi|mage|merc|treeBot|loader|acrid|captain|railgunner|voidman|[Ss]eeker|[Cc]hef|FalseSon|falseson|[Dd]rifter|DroneTech|heretic)_(?:m2|M2|R|skill2|skill4|Secondary|Special|SpecialAlt|R_snipe|R_alt|R_variant)\\w*(?:shoot|shot|fire|Fire|throw|launch|Launch|toss|lunge|shoot_fullCharge))$|^Play_item_proc_\\w*(?:explo|explode|impact)\\w*$|^Play_item_use_AP_round_impact$|^Play_(?:golem_laser_charge|titanboss_R_laser_preshoot|titanboss_m2_charge|titanboss_shift_charge|vagrant_attack2_charge|vagrant_R_charge|(?:vagrant|titanboss|clayboss|beetle_queen|grandParent|gravekeeper|magmaWorm|electricWorm|roboBallBoss|scav|moonBrother|voidRaid|artifactBoss|Boss_\\w+?|GG_Boss_\\w+?|boss_falseson)_\\w*(?:[Cc]harge|preshoot|PreFire|Windup)\\w*)$|^Play_(?:golem_laser_fire|titanboss_R_laser_shoot|titanboss_shift_shoot|vagrant_attack2_shoot|(?:vagrant|titanboss|clayboss|beetle_queen|grandParent|gravekeeper|magmaWorm|electricWorm|roboBallBoss|scav|moonBrother|voidRaid|artifactBoss|Boss_\\w+?|GG_Boss_\\w+?|boss_falseson)_\\w*(?:superLaser\\w*|Laser\\w*_Fire|laser_shoot|LaserBurst))$|^Play_UI_shrineActivate$|^Play_ui_teleporter_activate$|^Play_item_proc_(?:infusion|personal_shield_recharge|medkit|healingPotion\\w*)$|^Play_(?:GG_CHAR_|DLC4_Skills_)?(?:commando|Commano|huntress|Huntress|bandit2|MULT|engi|Engi|mage|merc|treeBot|loader|acrid|captain|railgunner|voidman|[Ss]eeker|[Cc]hef|FalseSon|falseson|[Dd]rifter|DroneTech|heretic)_(?:shift|utility|Utility|skill3)\\w*(?:start|Start|enter|dash|Dash|blink|activate|Activate|jump|release|slice)$|^Play_(?:huntress_R_jump|GG_CHAR_Drifter_Jump|acrid_shift_jump)$|^Play_(?:char_land|acrid_shift_land|railgunner_shift_land|GG_CHAR_Drifter_Land)$|^Play_UI_(?:item_pickup|chest_unlock|barrel_open|tripleChestShutter|lunarCache_open)$"
+ },
+ "rough": {
+  "impact": "hit",
+  "smash": "hit_m",
+  "fatal": "fatal",
+  "stagger": "stagger",
+  "hurt": "hit",
+  "struck": "hit",
+  "death": "knockdown",
+  "dodge": "roll",
+  "land": "land_heavy",
+  "charge": "charged",
+  "heal": "heal",
+  "buff": "buff",
+  "thud": "thud",
+  "boom": "blast",
+  "blast": "blast",
+  "seq": "hit_s",
+  "soft": "item",
+  "tick": "shot_s",
+  "patter": "shot_s",
+  "spatter": "hit_s",
+  "quake": "quake",
+  "warp": "warp",
+  "hold": "spray"
+ },
+ "haptic_trim": [
+  [
+   "^Play_UI_teleporter_event_complete$",
+   1.0
+  ],
+  [
+   "^Play_(?:(?:Boss_\\w+|GG_Boss_\\w+|boss_falseson)_[Dd]eath|beetle_queen_death|titanboss_death|vagrant_death|clayboss_death|grandParent_death|gravekeeper_death|magmaWorm_death|electricWorm_death|roboBallBoss_death|scav_death|artifactBoss_death)$",
+   1.0
+  ],
+  [
+   "^Play_ui_player_death$",
+   1.0
+  ],
+  [
+   "^Play_char_land_fall_damage$",
+   0.8
+  ],
+  [
+   "^Play_UI_takeDamage$",
+   1.0
+  ],
+  [
+   "^Play_(?:merc|loader|acrid|falseson|GG_CHAR_Drifter|treeBot_m1_3rd)_\\w*(?:sword_impact|m1_impact|m2_impact|bigSlash|_hit|Slap|BluntForce_0\\d|skill1_impact\\w*|dash_impact|R_variant_slam|uppercut)$",
+   1.1
+  ],
+  [
+   "^Play_UI_hit$",
+   0.45
+  ],
+  [
+   "^Play_UI_crit$",
+   0.9
+  ],
+  [
+   "^Play_(?:vagrant|titanboss|clayboss|beetle_queen|grandParent|gravekeeper|magmaWorm|electricWorm|roboBallBoss|scav|moonBrother|voidRaid|artifactBoss|Boss_\\w+?|GG_Boss_\\w+?|boss_falseson)_\\w*(?:explode|explo|fist|slam|clap|Slam|Explode)$",
+   0.7
+  ],
+  [
+   "^Play_(?:GG_CHAR_|DLC4_Skills_)?(?:commando|Commano|huntress|Huntress|bandit2|MULT|engi|Engi|mage|merc|treeBot|loader|acrid|captain|railgunner|voidman|[Ss]eeker|[Cc]hef|FalseSon|falseson|[Dd]rifter|DroneTech|heretic)_\\w*(?:explo|explode|Explode|Explos\\w*|lightningBlast|R_pop|shock)$",
+   0.8
+  ],
+  [
+   "^Play_(?:commando_M1|(?:GG_CHAR_|DLC4_Skills_)?(?:commando|Commano|huntress|Huntress|bandit2|MULT|engi|Engi|mage|merc|treeBot|loader|acrid|captain|railgunner|voidman|[Ss]eeker|[Cc]hef|FalseSon|falseson|[Dd]rifter|DroneTech|heretic)_(?:m1|M1|skill1|Primary)\\w*(?:shoot|shot|fire|Fire|rifle|shotgun|cast_lightning|_Shoot_\\w+|shootWide|shootTight))$",
+   0.2
+  ],
+  [
+   "^Play_(?:commando_R|commando_M2_grenade_throw|(?:GG_CHAR_|DLC4_Skills_)?(?:commando|Commano|huntress|Huntress|bandit2|MULT|engi|Engi|mage|merc|treeBot|loader|acrid|captain|railgunner|voidman|[Ss]eeker|[Cc]hef|FalseSon|falseson|[Dd]rifter|DroneTech|heretic)_(?:m2|M2|R|skill2|skill4|Secondary|Special|SpecialAlt|R_snipe|R_alt|R_variant)\\w*(?:shoot|shot|fire|Fire|throw|launch|Launch|toss|lunge|shoot_fullCharge))$",
+   0.5
+  ],
+  [
+   "^Play_item_proc_\\w*(?:explo|explode|impact)\\w*$|^Play_item_use_AP_round_impact$",
+   0.3
+  ],
+  [
+   "^Play_(?:golem_laser_charge|titanboss_R_laser_preshoot|titanboss_m2_charge|titanboss_shift_charge|vagrant_attack2_charge|vagrant_R_charge|(?:vagrant|titanboss|clayboss|beetle_queen|grandParent|gravekeeper|magmaWorm|electricWorm|roboBallBoss|scav|moonBrother|voidRaid|artifactBoss|Boss_\\w+?|GG_Boss_\\w+?|boss_falseson)_\\w*(?:[Cc]harge|preshoot|PreFire|Windup)\\w*)$",
+   0.4
+  ],
+  [
+   "^Play_(?:golem_laser_fire|titanboss_R_laser_shoot|titanboss_shift_shoot|vagrant_attack2_shoot|(?:vagrant|titanboss|clayboss|beetle_queen|grandParent|gravekeeper|magmaWorm|electricWorm|roboBallBoss|scav|moonBrother|voidRaid|artifactBoss|Boss_\\w+?|GG_Boss_\\w+?|boss_falseson)_\\w*(?:superLaser\\w*|Laser\\w*_Fire|laser_shoot|LaserBurst))$",
+   0.8
+  ],
+  [
+   "^Play_UI_shrineActivate$|^Play_ui_teleporter_activate$",
+   0.6
+  ],
+  [
+   "^Play_(?:char_land|acrid_shift_land|railgunner_shift_land|GG_CHAR_Drifter_Land)$",
+   0.35
+  ]
+ ],
+ "cutscene": {
+  "gain": 2.0,
+  "skip_grace": 2.0,
+  "max_s": 300,
+  "match": "impact|hit|crash|explo|break|slam|fall|door|gun|clash|stab|thud",
+  "wave": "seq",
+  "gap": 0.12
+ },
+ "clips": {
+  "trees": "trees.json",
+  "hap": "hap",
+  "spk": "spk"
+ },
+ "snap": "^Play_UI_teleporter_event_complete$|^fatal$|^Play_(?:(?:Boss_\\w+|GG_Boss_\\w+|boss_falseson)_[Dd]eath|beetle_queen_death|titanboss_death|vagrant_death|clayboss_death|grandParent_death|gravekeeper_death|magmaWorm_death|electricWorm_death|roboBallBoss_death|scav_death|artifactBoss_death)$|^stagger$",
+ "_made": "tools/gamesetup/autosetup.py from data/model.json - first values, not felt yet"
+}

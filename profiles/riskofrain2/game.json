@@ -1,0 +1,167 @@
+{
+ "name": "Risk of Rain 2",
+ "name_ko": "리스크 오브 레인 2",
+ "exe": "Risk of Rain 2.exe",
+ "engine": "wwise",
+ "event_file": "C:\\Users\\Public\\dshaptics\\events_unity.log",
+ "_run_note": "Unity + Wwise. Hook = BepInEx 5 + SonmatUnity.dll (part sonmat-unity): every sound by name, with its owner (GameObject). Sounds = the game's own Wwise banks (unity_wwise reader, as autosetup). The DualSense reaches the game through Steam Input / XInput; the game's own vibration (screen shake, RoR2.dll DefaultGamepadVibrationController) is cut by sonmat_rumble.dll when the switch is off.",
+ "_controls_note": "Pad layout = the usual default (not readable from this install: no Rewired InputManager in level0; from general knowledge): R2 = primary skill (held = auto-fire), L2 = secondary, L1 = utility, R1 = special, A/cross = jump, Y/triangle = interact, X/square = equipment. One mode: third-person shooter, 17+ survivors, each with m1/m2/shift/R (or skill1..4) sounds named after it. The biggest moments: the boss spawning (Play_boss_spawn_rumble), the teleporter finishing (Play_UI_teleporter_event_complete), a boss dying, my death, the drop pod landing at the start of a stage.",
+ "_places_note": "Stages are open maps (plains, desert, snow, lakes, caves, the moon); no vehicles, no water you swim in. Geysers launch you (Play_env_geyser_launch). No floor switch: one footstep name for every ground.",
+ "_owner_note": "Owners: my body plays Play_Player_footstep, my jumps and landings; my shots and their hits are played by the projectiles (a new GameObject each) - so shots go by the survivor's name (only my survivor's names come in solo), not by owner. Play_UI_hit / Play_UI_crit = MY damage landing (a hit marker, UI object), Play_UI_takeDamage = I am hurt. <monster>_impact = that monster being hit (by me or my drones): not used, UI_hit says it once.",
+ "hook": {
+  "bepinex": {},
+  "native": {
+   "event_ids": "event_ids.json",
+   "main": true
+  }
+ },
+ "player": "^Play_Player_footstep$",
+ "source": {
+  "steam_dir": "Risk of Rain 2",
+  "trees": "trees.json",
+  "hap": "hap",
+  "spk": "spk",
+  "type": "wwise_bnk",
+  "data": "Risk of Rain 2_Data/StreamingAssets/Audio/GeneratedSoundBanks/Windows",
+  "event_ids": "event_ids.json",
+  "speaker": "^Play_UI_(?:item_pickup|levelUp_player)$"
+ },
+ "slots": {
+  "finisher": "^Play_UI_teleporter_event_complete$",
+  "stagger": [
+   "^Play_(?:(?:Boss_\\w+|GG_Boss_\\w+|boss_falseson)_[Dd]eath|beetle_queen_death|titanboss_death|vagrant_death|clayboss_death|grandParent_death|gravekeeper_death|magmaWorm_death|electricWorm_death|roboBallBoss_death|scav_death|artifactBoss_death)$",
+   {
+    "speaker": false
+   }
+  ],
+  "death": "^Play_ui_player_death$",
+  "struck": "^Play_char_land_fall_damage$",
+  "hurt": [
+   "^Play_UI_takeDamage$",
+   {
+    "drawn": true,
+    "trim": 1.0,
+    "_why": "Play_UI_takeDamage is a UI sound: our hurt wave, as strong as a hit (standard 0.5-0.6)"
+   }
+  ],
+  "hit_heavy": [
+   "^Play_(?:merc|loader|acrid|falseson|GG_CHAR_Drifter|treeBot_m1_3rd)_\\w*(?:sword_impact|m1_impact|m2_impact|bigSlash|_hit|Slap|BluntForce_0\\d|skill1_impact\\w*|dash_impact|R_variant_slam|uppercut)$",
+   {
+    "mine": false
+   }
+  ],
+  "hit": [
+   "^Play_UI_crit$",
+   {
+    "mine": false,
+    "drawn": true,
+    "_why": "Play_UI_crit is a UI sound: our impact"
+   }
+  ],
+  "hit_light": [
+   "^Play_UI_hit$",
+   {
+    "gap": 0.08,
+    "trim": 0.45,
+    "drawn": true,
+    "wave": "marker",
+    "_why": "Play_UI_hit = every hit of mine that lands, ~50 a minute: a light marker under the shots, below being hurt"
+   }
+  ],
+  "boom": [
+   "^Play_(?:vagrant|titanboss|clayboss|beetle_queen|grandParent|gravekeeper|magmaWorm|electricWorm|roboBallBoss|scav|moonBrother|voidRaid|artifactBoss|Boss_\\w+?|GG_Boss_\\w+?|boss_falseson)_\\w*(?:explode|explo|fist|slam|clap|Slam|Explode)$",
+   {
+    "trim": 0.7
+   }
+  ],
+  "blast": [
+   "^Play_(?:GG_CHAR_|DLC4_Skills_)?(?:commando|Commano|huntress|Huntress|bandit2|MULT|engi|Engi|mage|merc|treeBot|loader|acrid|captain|railgunner|voidman|[Ss]eeker|[Cc]hef|FalseSon|falseson|[Dd]rifter|DroneTech|heretic)_\\w*(?:explo|explode|Explode|Explos\\w*|lightningBlast|R_pop|shock)$",
+   {
+    "mine": false
+   }
+  ],
+  "charge": "^Play_(?:GG_CHAR_|DLC4_Skills_)?(?:commando|Commano|huntress|Huntress|bandit2|MULT|engi|Engi|mage|merc|treeBot|loader|acrid|captain|railgunner|voidman|[Ss]eeker|[Cc]hef|FalseSon|falseson|[Dd]rifter|DroneTech|heretic)_\\w*(?:[Cc]harge(?:Up|1|2|3|_start)?|chargeStart|readyBow|Windup|buildup)$",
+  "stream": [
+   "^Play_(?:commando_M1|(?:GG_CHAR_|DLC4_Skills_)?(?:commando|Commano|huntress|Huntress|bandit2|MULT|engi|Engi|mage|merc|treeBot|loader|acrid|captain|railgunner|voidman|[Ss]eeker|[Cc]hef|FalseSon|falseson|[Dd]rifter|DroneTech|heretic)_(?:m1|M1|skill1|Primary)\\w*(?:shoot|shot|fire|Fire|rifle|shotgun|cast_lightning|_Shoot_\\w+|shootWide|shootTight))$",
+   {
+    "mine": false,
+    "gap": 0.12,
+    "trim": 0.2
+   }
+  ],
+  "shot": [
+   "^Play_(?:commando_R|commando_M2_grenade_throw|(?:GG_CHAR_|DLC4_Skills_)?(?:commando|Commano|huntress|Huntress|bandit2|MULT|engi|Engi|mage|merc|treeBot|loader|acrid|captain|railgunner|voidman|[Ss]eeker|[Cc]hef|FalseSon|falseson|[Dd]rifter|DroneTech|heretic)_(?:m2|M2|R|skill2|skill4|Secondary|Special|SpecialAlt|R_snipe|R_alt|R_variant)\\w*(?:shoot|shot|fire|Fire|throw|launch|Launch|toss|lunge|shoot_fullCharge))$",
+   {
+    "mine": false
+   }
+  ],
+  "shot_hit": [
+   "^Play_item_proc_\\w*(?:explo|explode|impact)\\w*$|^Play_item_use_AP_round_impact$",
+   {
+    "trim": 0.3
+   }
+  ],
+  "telegraph": "^Play_(?:golem_laser_charge|titanboss_R_laser_preshoot|titanboss_m2_charge|titanboss_shift_charge|vagrant_attack2_charge|vagrant_R_charge|(?:vagrant|titanboss|clayboss|beetle_queen|grandParent|gravekeeper|magmaWorm|electricWorm|roboBallBoss|scav|moonBrother|voidRaid|artifactBoss|Boss_\\w+?|GG_Boss_\\w+?|boss_falseson)_\\w*(?:[Cc]harge|preshoot|PreFire|Windup)\\w*)$",
+  "beam": "^Play_(?:golem_laser_fire|titanboss_R_laser_shoot|titanboss_shift_shoot|vagrant_attack2_shoot|(?:vagrant|titanboss|clayboss|beetle_queen|grandParent|gravekeeper|magmaWorm|electricWorm|roboBallBoss|scav|moonBrother|voidRaid|artifactBoss|Boss_\\w+?|GG_Boss_\\w+?|boss_falseson)_\\w*(?:superLaser\\w*|Laser\\w*_Fire|laser_shoot|LaserBurst))$",
+  "buff": "^Play_UI_shrineActivate$|^Play_ui_teleporter_activate$",
+  "heal": "^Play_item_proc_(?:infusion|personal_shield_recharge|medkit|healingPotion\\w*)$",
+  "dodge": "^Play_(?:GG_CHAR_|DLC4_Skills_)?(?:commando|Commano|huntress|Huntress|bandit2|MULT|engi|Engi|mage|merc|treeBot|loader|acrid|captain|railgunner|voidman|[Ss]eeker|[Cc]hef|FalseSon|falseson|[Dd]rifter|DroneTech|heretic)_(?:shift|utility|Utility|skill3)\\w*(?:start|Start|enter|dash|Dash|blink|activate|Activate|jump|release|slice)$",
+  "jump": "^Play_(?:huntress_R_jump|GG_CHAR_Drifter_Jump|acrid_shift_jump)$",
+  "land": [
+   "^Play_(?:char_land|acrid_shift_land|railgunner_shift_land|GG_CHAR_Drifter_Land)$",
+   {
+    "trim": 0.35
+   }
+  ],
+  "touch": "^Play_UI_(?:item_pickup|chest_unlock|barrel_open|tripleChestShutter|lunarCache_open)$",
+  "quake": "^Play_(?:boss_spawn_rumble|titanboss_step|titanboss_spawn|beetle_queen_spawn|clayboss_spawn|golem_clap|UI_podImpact|env_geyser_launch|mage_shift_wall_pre_explode_rumble)$",
+  "warp": "^Play_(?:UI_charTeleport|UI_teleport_off_map|huntress_shift_mini_blink)$",
+  "hold": "^Play_(?:huntress_R_rain_loop|MULT_m1_sawblade_active_loop)$"
+ },
+ "extra_rules": [
+  {
+   "match": "^Stop_",
+   "_note": "Wwise stop events carry the name of what they stop: never a vibration"
+  }
+ ],
+ "speaker": {
+  "allow": "^Play_UI_(?:item_pickup|levelUp_player)$"
+ },
+ "triggers": {
+  "_note": "R2 = primary (held = auto-fire): a light kick on each of my primary shots. L2 = secondary: one firmer kick when it goes off. First values, not felt.",
+  "primary": {
+   "match": "^Play_(?:commando_M1|(?:GG_CHAR_|DLC4_Skills_)?(?:commando|Commano|huntress|Huntress|bandit2|MULT|engi|Engi|mage|merc|treeBot|loader|acrid|captain|railgunner|voidman|[Ss]eeker|[Cc]hef|FalseSon|falseson|[Dd]rifter|DroneTech|heretic)_(?:m1|M1|skill1|Primary)\\w*(?:shoot|shot|fire|Fire|rifle|shotgun|cast_lightning|_Shoot_\\w+|shootWide|shootTight))$",
+   "pad": "R2",
+   "effect": "vibrate",
+   "amp": 4,
+   "hz": 9,
+   "hold": 0.08
+  },
+  "secondary": {
+   "match": "^Play_(?:commando_M2_grenade_throw|(?:GG_CHAR_|DLC4_Skills_)?(?:commando|Commano|huntress|Huntress|bandit2|MULT|engi|Engi|mage|merc|treeBot|loader|acrid|captain|railgunner|voidman|[Ss]eeker|[Cc]hef|FalseSon|falseson|[Dd]rifter|DroneTech|heretic)_(?:m2|M2|skill2|Secondary)\\w*(?:shoot|shot|fire|Fire|throw|launch|Launch|toss|lunge|shoot_fullCharge))$",
+   "pad": "L2",
+   "effect": "vibrate",
+   "amp": 8,
+   "hz": 9,
+   "hold": 0.13
+  }
+ },
+ "waves": {
+  "marker": [
+   [
+    95,
+    22,
+    0.24,
+    9
+   ]
+  ],
+  "hurt": [
+   [
+    70,
+    60,
+    0.95,
+    25
+   ]
+  ]
+ }
+}
