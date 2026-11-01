@@ -128,22 +128,11 @@
   "allow": "^Play_UI_(?:item_pickup|levelUp_player)$"
  },
  "triggers": {
-  "_note": "R2 = primary (held = auto-fire): a light kick on each of my primary shots. L2 = secondary: one firmer kick when it goes off. First values, not felt.",
-  "primary": {
-   "match": "^Play_(?:commando_M1|(?:GG_CHAR_|DLC4_Skills_)?(?:commando|Commano|huntress|Huntress|bandit2|MULT|engi|Engi|mage|merc|treeBot|loader|acrid|captain|railgunner|voidman|[Ss]eeker|[Cc]hef|FalseSon|falseson|[Dd]rifter|DroneTech|heretic)_(?:m1|M1|skill1|Primary)\\w*(?:shoot|shot|fire|Fire|rifle|shotgun|cast_lightning|_Shoot_\\w+|shootWide|shootTight))$",
-   "pad": "R2",
-   "effect": "vibrate",
-   "amp": 4,
-   "hz": 9,
-   "hold": 0.08
-  },
+  "_note": "L2 = secondary (Huntress: the glaive). It goes off a moment after the press, when the finger is already off, so a kick on its sound is never felt (11-01): the throw feel sits on L2 the whole game, felt at the pull. R2 = primary, pressed all the time: nothing (user 11-01).",
   "secondary": {
-   "match": "^Play_(?:commando_M2_grenade_throw|(?:GG_CHAR_|DLC4_Skills_)?(?:commando|Commano|huntress|Huntress|bandit2|MULT|engi|Engi|mage|merc|treeBot|loader|acrid|captain|railgunner|voidman|[Ss]eeker|[Cc]hef|FalseSon|falseson|[Dd]rifter|DroneTech|heretic)_(?:m2|M2|skill2|Secondary)\\w*(?:shoot|shot|fire|Fire|throw|launch|Launch|toss|lunge|shoot_fullCharge))$",
+   "preset": "wire",
    "pad": "L2",
-   "effect": "vibrate",
-   "amp": 8,
-   "hz": 9,
-   "hold": 0.13
+   "match": "."
   }
  },
  "waves": {
