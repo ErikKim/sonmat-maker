@@ -116,7 +116,7 @@
   "touch": "^Play_UI_(?:item_pickup|chest_unlock|barrel_open|tripleChestShutter|lunarCache_open)$",
   "quake": "^Play_(?:boss_spawn_rumble|titanboss_step|titanboss_spawn|beetle_queen_spawn|clayboss_spawn|golem_clap|UI_podImpact|env_geyser_launch|mage_shift_wall_pre_explode_rumble)$",
   "warp": "^Play_(?:UI_charTeleport|UI_teleport_off_map|huntress_shift_mini_blink)$",
-  "hold": "^Play_(?:huntress_R_rain_loop|MULT_m1_sawblade_active_loop)$"
+  "hold": "^(?:Play_huntress_R_rain_loop|Play_MULT_m1_sawblade_active_loop)$"
  },
  "extra_rules": [
   {

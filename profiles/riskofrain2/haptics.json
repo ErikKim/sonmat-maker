@@ -289,13 +289,21 @@
   ]
  },
  "beds": {
-  "hold:Play_(?:huntress_R_rain_loop|MULT_m1_sawblade_active_loop)": {
+  "hold:Play_huntress_R_rain_loop": {
    "every": 0.07,
    "vary": 0.7,
    "max": 30,
-   "on": "^Play_(?:huntress_R_rain_loop|MULT_m1_sawblade_active_loop)$",
-   "off": "^Stop_Play_(?:huntress_R_rain_loop|MULT_m1_sawblade_active_loop)$",
-   "wave": "hold"
+   "on": "^Play_huntress_R_rain_loop$",
+   "wave": "hold",
+   "off": "^Stop_(?:Play_)?huntress_R_rain_loop$"
+  },
+  "hold:Play_MULT_m1_sawblade_active_loop": {
+   "every": 0.07,
+   "vary": 0.7,
+   "max": 30,
+   "on": "^Play_MULT_m1_sawblade_active_loop$",
+   "wave": "hold",
+   "off": "^Stop_(?:Play_)?MULT_m1_sawblade_active_loop$"
   }
  },
  "rules": [
@@ -467,7 +475,7 @@
    "_slot": "warp"
   },
   {
-   "match": "^Play_(?:huntress_R_rain_loop|MULT_m1_sawblade_active_loop)$",
+   "match": "^(?:Play_huntress_R_rain_loop|Play_MULT_m1_sawblade_active_loop)$",
    "wave": "hold",
    "who": "any",
    "_slot": "hold",
