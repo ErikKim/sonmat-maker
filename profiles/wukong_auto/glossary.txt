@@ -7,3 +7,6 @@ zadi = my staff slamming the ground (my_hit); die_bodyfall = me falling down aft
 xuli_levelNN_cast (any suffix) = release of the charged attack, never charge; xuli_levelNN_rise / _done = charge
 hit_enm_* = an enemy's attack landing on me (get_hit), except hit_enm_*_zhuangun (deflected, parry)
 charge level sets weight: level01 = light, level02 = mid, level03 / level04 = strong (also for their casts)
+folder Hit/Player_Hit_Enemy = my attacks landing on an enemy, in any form (my_hit): Bang = staff, qiang = spear, Claw / Foot / Sharp / FTXD / DuChong = my transformed body's weapon
+folder Player/BianShen, DuChongSiShi, QiTianDaSheng, FTXD, RenZhongDai, JinChan = me transformed or a transformation form; their atk = my attack (my_swing / my_hit by name), not an enemy
+fabao = magic treasure item I use (skill); Pause / Resume = system (ui)

@@ -1,0 +1,6 @@
+pl#### = a character or vehicle I control (me); wp#### / wpf#### = my weapons; wp3000-wp3002 = my pod (support drone that shoots for me)
+core_pl_* = my common actions; core_hak_* = my hacking minigame (me as the ship); core_stg_* = shooting stages (pl = my ship, em = enemy ship)
+core_em_* / em_* = enemy side: other, unless it is an enemy hitting me (get_hit) or an enemy I destroy (my_hit)
+AS = my pod program (special attack, skill); atk / swing / wsh = my attack; hit = connecting (my_hit); dmg / damage = me being hurt (get_hit)
+shot = firing (my_hit light, frequent); bom / explo = explosion (release when mine); Mov / move / boost / hover / servo = my movement (move)
+window / cursor / shop / save / menu / mail / game_start / pause / pollution / noise = system (ui)

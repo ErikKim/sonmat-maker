@@ -1,7 +1,7 @@
 """Auto-classify a game's sound events and derive haptic rules (gain, snap) - no hand-written regex.
 
 usage: python3 classify_events.py <events.txt> <out rules.json> [--log probe_events.txt] [--glossary g.txt]
-                                 [--overrides o.json] [--model gemma4:12b-mlx]
+                                 [--overrides o.json] [--model gemma4:12b-mlx] [--keep old_rules.json]
 
 events.txt: one event path per line (e.g. SFX/Player/WuKong/Attack/.../EVT_player_wk_atk_zadi_water_light).
 --log: a play log with one event path per line; how often each event fires scales it (frequent
@@ -11,6 +11,9 @@ A local LLM (Ollama) only maps names to a fixed class + weight. Everything numer
 RULES below, which is the same for every game.
 --glossary: a few lines of game-specific vocabulary the model can't know (one "term = meaning" per line).
 --overrides: {"regex": {"gain": x, "snap": bool}} taste decisions that win over the classifier.
+--keep: an earlier rules.json; events already in it are not asked again and stay exactly as they were
+        (hand-tuned gains survive). The output is old + new.
+At the end the tokens and seconds the model used are printed (to judge the cost before other games).
 """
 import argparse, collections, json, re, sys, urllib.request
 
@@ -36,11 +39,17 @@ RULES = {
 }
 WEIGHT = {"light": 0.6, "mid": 0.8, "strong": 1.0, "none": 1.0}
 
+USAGE = collections.Counter()
+
 def ask(model, prompt):
     req = urllib.request.Request("http://localhost:11434/api/generate", data=json.dumps({
         "model": model, "prompt": prompt, "stream": False, "think": False,
         "options": {"temperature": 0, "num_predict": 4096}}).encode(), headers={"Content-Type": "application/json"})
     r = json.load(urllib.request.urlopen(req, timeout=600))
+    USAGE["calls"] += 1
+    USAGE["prompt_tokens"] += r.get("prompt_eval_count", 0)
+    USAGE["output_tokens"] += r.get("eval_count", 0)
+    USAGE["seconds"] += r.get("total_duration", 0) / 1e9
     if not r.get("response"):
         raise RuntimeError(f"empty response, done_reason={r.get('done_reason')}")
     return r["response"]
@@ -72,7 +81,7 @@ ap = argparse.ArgumentParser()
 ap.add_argument("events"); ap.add_argument("out")
 ap.add_argument("--log"); ap.add_argument("--model", default="gemma4:12b-mlx")
 ap.add_argument("--batch", type=int, default=25)
-ap.add_argument("--glossary"); ap.add_argument("--overrides")
+ap.add_argument("--glossary"); ap.add_argument("--overrides"); ap.add_argument("--keep")
 ap.add_argument("--votes", type=int, default=3, help="classify N times (shuffled batches), majority wins")
 ap.add_argument("--auto-glossary", help="let the model write the glossary from the full event list first (saved to this path)")
 a = ap.parse_args()
@@ -91,6 +100,11 @@ Event names:
 {names}"""
     return ask(model, prompt).strip()
 
+paths = [l.strip() for l in open(a.events) if l.strip()]
+kept = json.load(open(a.keep, encoding="utf-8")) if a.keep else {}
+_seen = set(kept)
+paths = [p for p in paths if p.rsplit("/", 1)[-1] not in _seen and not _seen.add(p.rsplit("/", 1)[-1])]
+print(f"to classify: {len(paths)} (kept {len(kept)})", file=sys.stderr, flush=True)
 if a.auto_glossary:
     glossary_text = make_glossary(a.model, paths)
     open(a.auto_glossary, "w", encoding="utf-8").write(glossary_text + "\n")
@@ -100,7 +114,6 @@ else:
 glossary = ("Game vocabulary:\n" + glossary_text) if glossary_text else ""
 overrides = [(re.compile(k, re.I), v) for k, v in json.load(open(a.overrides)).items()] if a.overrides else []
 
-paths = [l.strip() for l in open(a.events) if l.strip()]
 counts = collections.Counter(l.strip().rsplit("/", 1)[-1] for l in open(a.log)) if a.log else {}
 def label_chunk(chunk):
     """{leaf: (class, weight)}; a failing chunk is split in half until it works."""
@@ -164,5 +177,9 @@ for leaf, (cls, weight) in labels.items():
             rule.update(ov, override=rx.pattern)
             break
     rules[leaf] = rule
+new = collections.Counter(r["class"] for r in rules.values())
+rules = {**kept, **rules}
 json.dump(rules, open(a.out, "w"), indent=1, ensure_ascii=False)
-print(collections.Counter(r["class"] for r in rules.values()))
+print("new:", dict(new))
+print(f"usage: {USAGE['calls']} calls, prompt {USAGE['prompt_tokens']} + output {USAGE['output_tokens']} tokens, "
+      f"{USAGE['seconds']:.0f} s model time ({a.model})")

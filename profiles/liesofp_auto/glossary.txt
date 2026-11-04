@@ -1,0 +1,7 @@
+SE_PC_* = me (the player, a puppet with a mechanical arm); SE_NPC_* = enemies (SE_NPC_SK_GetHit = an enemy being hit by me: my_hit)
+SK = skill/attack; FX = effect of my attack or weapon; PJ = my projectile (fired, flying: my_swing light; hitting: my_hit); WP = my weapon itself (break, parts, equip: skill)
+MT = my motion/body (body, leather, motor, give key, item use: move or skill); Arm = my mechanical arm (Fulminis, Puppet String, Aegis, Boomerang ...: skill, its hit = my_hit)
+FableArts / FA = weapon special art (release); CA / NA / SA / H = charged / normal / strong attack (CA charged = release, H = strong)
+Charge = charging (charge); Loop = a sustained sound while it lasts (same class, weight light); Spin = spinning attack (my_swing)
+Item / Debuff / Buff / ReturnClock / Monard = consumables and status on me (skill); Dash / Footstep = move
+Electricity / Fire / Acid / Enchant = element of my weapon (does not change the class)

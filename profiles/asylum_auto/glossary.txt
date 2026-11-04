@@ -1,0 +1,4 @@
+PL_* = me (Batman): Cape = my cape (glide, stun, swish: move or my_swing); Hand / EdgeShimmy / LedgeFall / RopeSlide = my climbing and hanging (move)
+DV_* = my gadgets: Batarang / SonicBatarang / Harpoon / GrappleGun / BatGel (throw, fire, explode: skill; impact / explode = my_hit or release)
+Decipher / SonarPulse / BatSignal / Spotlight = my scanning devices (ui unless a physical action); Collect / XP / ComboScore / Rescue = rewards (ui)
+Cough / Smilex = me hurt by gas (get_hit light); TyingUp = me tying an enemy (skill); IvyPod_Destroy = me destroying a plant pod (my_hit)
